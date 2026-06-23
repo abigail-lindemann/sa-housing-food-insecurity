@@ -254,7 +254,7 @@ a  { color: inherit; }
 .narrative {
   max-width: var(--max);
   margin: 0 auto;
-  padding: 4rem 1.5rem;
+  padding: 2rem 1.5rem;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 4rem;
