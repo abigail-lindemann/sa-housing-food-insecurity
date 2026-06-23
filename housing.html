@@ -11,7 +11,7 @@
 <body>
 
 <nav class="site-nav">
-  <a class="wordmark" href="index.html">SA Housing &amp; Food Insecurity</a>
+  <a class="wordmark" href="index.html">CivicData SA</a>
   <ul class="nav-links">
     <li><a href="index.html">Overview</a></li>
     <li><a href="housing.html" class="active">Housing</a></li>
@@ -123,16 +123,6 @@
       median incomes.
     </p>
   </div>
-  <div>
-    <div class="pullquote">
-      "Neighborhoods with the highest cost burden don't just face a housing
-      problem — they're the same neighborhoods with the fewest grocery stores,
-      the longest commutes, and the thinnest social safety net."
-    </div>
-    <p style="font-size:0.8rem;color:var(--muted);margin-top:0.75rem;">
-      — Project framing note, CivicData SA
-    </p>
-  </div>
 </section>
 
 <section class="narrative" style="padding-top:0;">
@@ -216,7 +206,7 @@
 </section>
 
 <footer class="site-footer">
-  <span>Built with open data · <a href="mailto:abigail.c.lindemann@gmail.com">abigail.c.lindemann@gmail.com</a> · <a href="https://github.com/abigail-lindemann?tab=repositories" target="_blank" rel="noopener">GitHub</a></span>
+  <span>Built with open data · <a href="mailto:civicdatasa@gmail.com">civicdatasa@gmail.com</a> · <a href="https://github.com/civicdatasa" target="_blank" rel="noopener">GitHub</a></span>
   <span id="last-updated"></span>
 </footer>
 
@@ -246,7 +236,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let housingLayer = null;
   loadChoropleth(
     map,
-    'data/block_groups.geojson',
+    'data/housing_block_groups.geojson',
     f => housingColor(f.properties.housing_score),
     housingPopup
   ).then(layer => {
@@ -268,7 +258,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (e.target.checked && !povertyLayer) {
       loadChoropleth(
         map,
-        'data/block_groups.geojson',
+        'data/housing_block_groups.geojson',
         f => {
           const p = f.properties.poverty_rate ?? 0;
           const colors = ['#fef0d9','#fdd49e','#fdbb84','#fc8d59','#e34a33','#b30000'];

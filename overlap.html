@@ -11,7 +11,7 @@
 <body>
 
 <nav class="site-nav">
-  <a class="wordmark" href="index.html">SA Housing &amp; Food Insecurity</a>
+  <a class="wordmark" href="index.html">CivicData SA</a>
   <ul class="nav-links">
     <li><a href="index.html">Overview</a></li>
     <li><a href="housing.html">Housing</a></li>
@@ -124,16 +124,6 @@
       disinvestment. That's the shape of the problem.
     </p>
   </div>
-  <div>
-    <div class="pullquote" style="border-color: #7b2d2d; background: rgba(123,45,45,0.06);">
-      "The dual-insecurity block groups are the places where policy interventions
-      would have the greatest compounding effect — housing relief and food
-      access investment going to the same residents at the same time."
-    </div>
-    <p style="font-size:0.8rem;color:var(--muted);margin-top:0.75rem;">
-      — Project framing note, CivicData SA
-    </p>
-  </div>
 </section>
 
 <section class="narrative" style="padding-top:0;">
@@ -210,7 +200,7 @@
 </section>
 
 <footer class="site-footer">
-  <span>Built with open data · <a href="mailto:abigail.c.lindemann@gmail.com">abigail.c.lindemann@gmail.com</a> · <a href="https://github.com/abigail-lindemann?tab=repositories" target="_blank" rel="noopener">GitHub</a></span>
+  <span>Built with open data · <a href="mailto:civicdatasa@gmail.com">civicdatasa@gmail.com</a> · <a href="https://github.com/civicdatasa" target="_blank" rel="noopener">GitHub</a></span>
   <span id="last-updated"></span>
 </footer>
 
@@ -238,7 +228,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   loadChoropleth(
     map,
-    'data/block_groups.geojson',
+    'data/overlap_block_groups.geojson',
     overlapColor,
     overlapPopup
   ).then(layer => {
@@ -251,8 +241,8 @@ document.addEventListener('DOMContentLoaded', () => {
       // Load both food banks and WIC into one layer group
       const group = L.layerGroup().addTo(map);
       Promise.all([
-        loadPoints(null, 'data/food_banks.geojson', '#c0392b', 'Food bank / pantry'),
-        loadPoints(null, 'data/wic_clinics.geojson', '#e8a020', 'WIC clinic'),
+        loadPoints(null, 'data/food_banks_bexar.geojson', '#c0392b', 'Food bank / pantry'),
+        loadPoints(null, 'data/wic_clinics_bexar.geojson', '#e8a020', 'WIC clinic'),
       ]).then(([fb, wic]) => {
         if (fb)  { fb.addTo(map);  }
         if (wic) { wic.addTo(map); }
