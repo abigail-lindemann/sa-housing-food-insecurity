@@ -246,7 +246,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let housingLayer = null;
   loadChoropleth(
     map,
-    'data/housing_block_groups.geojson',
+    'data/block_groups.geojson',
     f => housingColor(f.properties.housing_score),
     housingPopup
   ).then(layer => {
@@ -268,7 +268,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (e.target.checked && !povertyLayer) {
       loadChoropleth(
         map,
-        'data/housing_block_groups.geojson',
+        'data/block_groups.geojson',
         f => {
           const p = f.properties.poverty_rate ?? 0;
           const colors = ['#fef0d9','#fdd49e','#fdbb84','#fc8d59','#e34a33','#b30000'];
