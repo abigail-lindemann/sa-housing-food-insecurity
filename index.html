@@ -4,88 +4,175 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Housing & Food Insecurity in San Antonio — CivicData SA</title>
+  <meta name="description" content="A neighborhood-level analysis of housing cost burden, food access, and where both forms of insecurity overlap across Bexar County, TX.">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-  <header class="site-header">
-    <span class="brand">CIVICDATA SA</span>
-    <nav>
-      <a href="housing.html">Housing</a>
-      <a href="food.html">Food Access</a>
-      <a href="overlap.html">Combined View</a>
-    </nav>
-  </header>
+<nav class="site-nav">
+  <a class="wordmark" href="index.html">CivicData SA</a>
+  <ul class="nav-links">
+    <li><a href="index.html" class="active">Overview</a></li>
+    <li><a href="housing.html">Housing</a></li>
+    <li><a href="food.html">Food Access</a></li>
+    <li><a href="overlap.html">Combined View</a></li>
+  </ul>
+</nav>
 
-  <div class="page-hero">
-    <h1>Housing & Food Insecurity Across San Antonio</h1>
-    <p class="subtitle">A neighborhood-level analysis of Bexar County · CivicData SA</p>
+<section class="index-hero">
+  <span class="project-tag">Bexar County · 2019–2023 ACS</span>
+  <h1>Housing &amp; Food<br>Insecurity in San Antonio</h1>
+  <p class="lede">
+    Thousands of Bexar County families pay over a third of their income on rent
+    and live more than a mile from a full-service grocery store. This analysis
+    maps where those pressures are highest — and where they overlap.
+  </p>
+</section>
+
+<div class="stat-strip">
+  <div class="stat-strip-inner">
+    <div class="stat-card housing-accent">
+      <div class="stat-value" id="stat-costburden">—</div>
+      <div class="stat-label">of renters in Bexar County are cost-burdened (paying &gt;30% of income on housing)</div>
+      <div class="stat-bar"><div class="stat-bar-fill" data-pct="0" id="bar-costburden"></div></div>
+    </div>
+    <div class="stat-card alert-accent">
+      <div class="stat-value" id="stat-severe">—</div>
+      <div class="stat-label">face severe cost burden, paying more than half their income on rent</div>
+      <div class="stat-bar"><div class="stat-bar-fill" data-pct="0" id="bar-severe"></div></div>
+    </div>
+    <div class="stat-card food-accent">
+      <div class="stat-value" id="stat-desert">—</div>
+      <div class="stat-label">of Bexar County census tracts qualify as food deserts under the USDA 1-mile standard</div>
+      <div class="stat-bar"><div class="stat-bar-fill" data-pct="0" id="bar-desert"></div></div>
+    </div>
+    <div class="stat-card alert-accent">
+      <div class="stat-value" id="stat-both">—</div>
+      <div class="stat-label">of block groups face both high housing insecurity and poor food access simultaneously</div>
+      <div class="stat-bar"><div class="stat-bar-fill" data-pct="0" id="bar-both"></div></div>
+    </div>
   </div>
+</div>
 
-  <div class="content-wrap">
+<div class="analysis-grid">
+  <a href="housing.html" class="analysis-card housing">
+    <div class="card-tag">Analysis 1</div>
+    <h2>Housing Insecurity</h2>
+    <p>Cost burden, severe cost burden, and overcrowding at the block group level — with the neighborhoods under the most pressure mapped and ranked.</p>
+    <div class="card-arrow">Explore housing data →</div>
+  </a>
+  <a href="food.html" class="analysis-card food">
+    <div class="card-tag">Analysis 2</div>
+    <h2>Food Access</h2>
+    <p>Distance from every block group to the nearest full-service grocery store, mapped against USDA food desert designations and WIC/SNAP participation.</p>
+    <div class="card-arrow">Explore food access data →</div>
+  </a>
+  <a href="overlap.html" class="analysis-card overlap">
+    <div class="card-tag">Combined View</div>
+    <h2>Where Housing &amp; Food Insecurity Overlap</h2>
+    <p>The signature finding: block groups classified by their position on both dimensions simultaneously — revealing the neighborhoods under pressure on every front.</p>
+    <div class="card-arrow">See the overlap map →</div>
+  </a>
+</div>
 
-    <div class="narrative">
-      <p>In San Antonio, the zip code you live in shapes your access to stable housing and affordable food
-      as much as your income does. This analysis maps housing cost burden, overcrowding, and grocery
-      access across all 1,139 census block groups in Bexar County — revealing where insecurity
-      clusters, how it overlaps, and where existing services fall short.</p>
-    </div>
+<section class="data-table-section">
+  <h2>Data Sources</h2>
+  <table>
+    <thead>
+      <tr><th>Dataset</th><th>Source</th><th>Updated</th><th>Status</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>ACS housing &amp; demographic variables</td>
+        <td>Census API — 2019–2023 5-year estimates</td>
+        <td>Annual (Jan 1)</td>
+        <td><span class="badge badge-ok">Automated</span></td>
+      </tr>
+      <tr>
+        <td>USDA Food Access Research Atlas</td>
+        <td>USDA Economic Research Service</td>
+        <td>Every few years</td>
+        <td><span class="badge badge-ok">Automated</span></td>
+      </tr>
+      <tr>
+        <td>SNAP-authorized grocery stores</td>
+        <td>USDA FNS via ArcGIS open data</td>
+        <td>Monthly (1st)</td>
+        <td><span class="badge badge-ok">Automated</span></td>
+      </tr>
+      <tr>
+        <td>Food bank &amp; pantry locations</td>
+        <td>SA Food Bank / 211 SA</td>
+        <td>1–2× per year</td>
+        <td><span class="badge badge-manual">Manual CSV</span></td>
+      </tr>
+      <tr>
+        <td>WIC clinic locations</td>
+        <td>Texas DSHS / texaswic.org</td>
+        <td>1–2× per year</td>
+        <td><span class="badge badge-manual">Manual CSV</span></td>
+      </tr>
+    </tbody>
+  </table>
+</section>
 
-    <div class="stat-row">
-      <div class="stat-box">
-        <div class="number">277</div>
-        <div class="label">block groups with high housing insecurity (top 25%)</div>
-      </div>
-      <div class="stat-box">
-        <div class="number">544</div>
-        <div class="label">block groups with no grocery store within 1 mile</div>
-      </div>
-      <div class="stat-box">
-        <div class="number">155</div>
-        <div class="label">block groups with high housing AND food insecurity</div>
-      </div>
-      <div class="stat-box">
-        <div class="number">72</div>
-        <div class="label">dual-insecurity block groups also poorly served by food banks and WIC</div>
-      </div>
-    </div>
+<footer class="site-footer">
+  <span>Built with open data · <a href="mailto:civicdatasa@gmail.com">civicdatasa@gmail.com</a> · <a href="https://github.com/civicdatasa" target="_blank" rel="noopener">GitHub</a></span>
+  <span id="last-updated"></span>
+</footer>
 
-    <div class="analysis-grid">
-      <div class="analysis-card">
-        <h2>Housing Insecurity</h2>
-        <p>Cost burden, overcrowding, and severe rent stress across Bexar County neighborhoods.
-        Which areas are most at risk — and how does insecurity track with income and race?</p>
-        <a class="btn" href="housing.html">Explore housing data →</a>
-      </div>
-      <div class="analysis-card">
-        <h2>Food Access</h2>
-        <p>Distance to the nearest grocery store, USDA food desert designations, and
-        food bank coverage gaps across San Antonio neighborhoods.</p>
-        <a class="btn" href="food.html">Explore food access →</a>
-      </div>
-      <div class="analysis-card">
-        <h2>Combined View</h2>
-        <p>Where do housing and food insecurity overlap? This map identifies neighborhoods
-        under pressure on both dimensions — and which are furthest from support services.</p>
-        <a class="btn" href="overlap.html">See the overlap →</a>
-      </div>
-    </div>
+<script src="js/site.js"></script>
+<script>
+// Pull summary stats from the GeoJSON files to populate the callout numbers.
+// Falls back to showing placeholder dashes if data isn't loaded yet.
+document.addEventListener('DOMContentLoaded', () => {
+  Promise.all([
+    fetch('data/housing_block_groups.geojson').then(r => r.ok ? r.json() : null).catch(() => null),
+    fetch('data/food_access_tracts.geojson').then(r => r.ok ? r.json() : null).catch(() => null),
+    fetch('data/overlap_block_groups.geojson').then(r => r.ok ? r.json() : null).catch(() => null),
+  ]).then(([housing, food, overlap]) => {
 
-    <div class="narrative">
-      <h2>About this project</h2>
-      <p>This analysis was produced by CivicData SA using publicly available data from the
-      U.S. Census Bureau (ACS 5-year estimates, 2019–2023), the USDA Economic Research Service,
-      and the USDA SNAP retailer database. All data, code, and methodology are published openly
-      on <a href="https://github.com/civicdatasa">GitHub</a>.</p>
-      <p>Questions or corrections: <a href="mailto:civicdatasa@gmail.com">civicdatasa@gmail.com</a></p>
-    </div>
+    if (housing && housing.features && housing.features.length) {
+      const props = housing.features.map(f => f.properties);
+      const cb  = props.map(p => p.cost_burden_rate).filter(v => v != null && !isNaN(v));
+      const scb = props.map(p => p.severe_cost_burden_rate).filter(v => v != null && !isNaN(v));
+      if (cb.length) {
+        const avgCB = cb.reduce((a,b) => a+b, 0) / cb.length;
+        const avgSCB = scb.reduce((a,b) => a+b, 0) / scb.length;
+        const pctCB  = Math.round(avgCB  * 100);
+        const pctSCB = Math.round(avgSCB * 100);
+        document.getElementById('stat-costburden').textContent = pctCB + '%';
+        document.getElementById('stat-severe').textContent     = pctSCB + '%';
+        document.getElementById('bar-costburden').dataset.pct  = pctCB;
+        document.getElementById('bar-severe').dataset.pct      = pctSCB;
+      }
+    }
 
-  </div>
+    if (food && food.features && food.features.length) {
+      const props = food.features.map(f => f.properties);
+      const deserts = props.filter(p => p.LILATracts_1And10 === 1).length;
+      const pct = Math.round(deserts / props.length * 100);
+      document.getElementById('stat-desert').textContent = pct + '%';
+      document.getElementById('bar-desert').dataset.pct  = pct;
+    }
 
-  <footer class="site-footer">
-    Built with open data · San Antonio, TX ·
-    <a href="https://github.com/civicdatasa">github.com/civicdatasa</a>
-  </footer>
+    if (overlap && overlap.features && overlap.features.length) {
+      const props = overlap.features.map(f => f.properties);
+      const both  = props.filter(p => (p.housing_score ?? 0) > 0.5 && (p.nearest_grocery_mi ?? 0) > 1).length;
+      const pct   = Math.round(both / props.length * 100);
+      document.getElementById('stat-both').textContent = pct + '%';
+      document.getElementById('bar-both').dataset.pct  = pct;
+    }
 
+    // re-trigger bar animations after data is set
+    document.querySelectorAll('.stat-bar-fill[data-pct]').forEach(el => {
+      const pct = parseFloat(el.dataset.pct);
+      if (!isNaN(pct) && pct > 0) {
+        setTimeout(() => { el.style.width = pct + '%'; }, 100);
+      }
+    });
+  });
+});
+</script>
 </body>
 </html>

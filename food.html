@@ -3,195 +3,344 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Food Access — CivicData SA</title>
+  <title>Food Access in San Antonio — CivicData SA</title>
+  <meta name="description" content="Mapping grocery store access, food deserts, and food assistance resources across Bexar County census tracts.">
   <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 </head>
 <body>
 
-  <header class="site-header">
-    <span class="brand">CIVICDATA SA</span>
-    <nav>
-      <a href="index.html">Home</a>
-      <a href="housing.html">Housing</a>
-      <a href="overlap.html">Combined View</a>
-    </nav>
-  </header>
+<nav class="site-nav">
+  <a class="wordmark" href="index.html">CivicData SA</a>
+  <ul class="nav-links">
+    <li><a href="index.html">Overview</a></li>
+    <li><a href="housing.html">Housing</a></li>
+    <li><a href="food.html" class="active">Food Access</a></li>
+    <li><a href="overlap.html">Combined View</a></li>
+  </ul>
+</nav>
 
-  <div class="page-hero">
-    <h1>Food Access in San Antonio</h1>
-    <p class="subtitle">Grocery store distance, food deserts, and service gaps across Bexar County · CivicData SA</p>
-    <p class="last-updated" id="last-updated"></p>
+<div class="page-hero">
+  <div class="eyebrow">Analysis 2 of 2 · Bexar County</div>
+  <h1>Food Access<br>Across San Antonio</h1>
+  <p class="lede">
+    A full-service grocery store is one of the most basic infrastructure needs
+    of a neighborhood. In parts of San Antonio, the nearest one is more than a
+    mile away — and for residents without a car, that distance is a barrier to
+    a healthy diet.
+  </p>
+  <div class="meta">
+    <span>USDA Food Access Research Atlas · SNAP retailer data</span>
+    <span>Distance analysis from block group centroids</span>
+    <span>0.5-mile and 1-mile thresholds</span>
   </div>
+</div>
 
-  <div class="map-wrap">
-    <div id="map"></div>
-    <div class="map-legend">
-      <strong>Distance to Nearest Grocery Store</strong><br>
-      <span class="legend-swatch" style="background:#f7fcf5"></span> Within 0.5 mi<br>
-      <span class="legend-swatch" style="background:#74c476"></span> 0.5–1.0 mi<br>
-      <span class="legend-swatch" style="background:#238b45"></span> 1.0–3.0 mi<br>
-      <span class="legend-swatch" style="background:#00441b"></span> Beyond 3.0 mi<br>
-      <span class="legend-swatch" style="background:#e8e4dc; border:1px solid #ccc"></span> Grocery store
+<div class="stat-strip">
+  <div class="stat-strip-inner">
+    <div class="stat-card food-accent">
+      <div class="stat-value" id="stat-desert1">—</div>
+      <div class="stat-label">of Bexar County tracts are food deserts under the USDA 1-mile urban standard</div>
+      <div class="stat-bar"><div class="stat-bar-fill" data-pct="0" id="bar-desert1"></div></div>
+    </div>
+    <div class="stat-card alert-accent">
+      <div class="stat-value" id="stat-desert05">—</div>
+      <div class="stat-label">qualify under the stricter 0.5-mile threshold (10-minute walking distance)</div>
+      <div class="stat-bar"><div class="stat-bar-fill" data-pct="0" id="bar-desert05"></div></div>
+    </div>
+    <div class="stat-card food-accent">
+      <div class="stat-value" id="stat-grocery">—</div>
+      <div class="stat-label">SNAP-authorized full-service grocery stores currently operating in Bexar County</div>
+      <div class="stat-bar"><div class="stat-bar-fill" data-pct="0" id="bar-grocery"></div></div>
+    </div>
+    <div class="stat-card food-accent">
+      <div class="stat-value" id="stat-avg-dist">—</div>
+      <div class="stat-label">Average distance to the nearest full-service grocery store from a block group centroid</div>
+      <div class="stat-bar"><div class="stat-bar-fill" data-pct="0" id="bar-avg-dist"></div></div>
     </div>
   </div>
+</div>
 
-  <div class="content-wrap">
-
-    <div class="stat-row">
-      <div class="stat-box">
-        <div class="number">544</div>
-        <div class="label">block groups with no grocery store within 1 mile</div>
-      </div>
-      <div class="stat-box">
-        <div class="number">191</div>
-        <div class="label">block groups within a 10-minute walk of a grocery store</div>
-      </div>
-      <div class="stat-box">
-        <div class="number">222</div>
-        <div class="label">block groups in USDA-designated food deserts</div>
-      </div>
-      <div class="stat-box">
-        <div class="number">13.8 mi</div>
-        <div class="label">maximum distance to nearest grocery store in Bexar County</div>
-      </div>
+<section class="map-section">
+  <div id="map-food"></div>
+  <div class="map-sidebar">
+    <div>
+      <h2>Distance to Nearest Grocery</h2>
+      <p>
+        Darker teal = farther from a full-service grocery store. The USDA
+        defines food deserts as low-income tracts where a significant share
+        of residents live more than 1 mile (urban) or 10 miles (rural) from
+        the nearest supermarket.
+      </p>
     </div>
-
-    <div class="narrative">
-      <p>More than half of Bexar County's neighborhoods have no full-service grocery store
-      within a mile — the threshold the USDA uses to define a food desert in urban areas.
-      For the 191 block groups within half a mile of a store, grocery access is walkable.
-      For the 544 beyond a mile, getting food requires a car, a bus ride, or a long walk.</p>
-
-      <h2>What the map shows</h2>
-      <p>Block groups are shaded by distance to the nearest SNAP-authorized full-service
-      grocery store. Darker green indicates worse access. Grocery store locations are shown
-      as markers. Click any block group to see its distance to the nearest store, food bank,
-      and WIC clinic.</p>
-
-      <h2>The USDA standard vs. our measure</h2>
-      <p>The USDA Food Desert Atlas designates 222 Bexar County block groups as food deserts —
-      areas that are both low-income and low-access. Our distance-based measure identifies
-      544 block groups beyond the 1-mile threshold, including higher-income areas where
-      residents still face long distances to grocery stores. The two measures together
-      capture different dimensions of the same problem.</p>
-
-      <h2>Food banks and WIC clinics</h2>
-      <p>San Antonio's 10 food bank and pantry locations and 15 WIC clinics are unevenly
-      distributed across the county. The average block group is 4 miles from a food bank
-      and 3.3 miles from a WIC clinic. In dual-insecurity neighborhoods — those with both
-      high housing cost burden and poor grocery access — the average distance to a food
-      bank rises to 4.7 miles.</p>
-
-      <h2>Data notes</h2>
-      <p>Grocery store locations are drawn from the USDA SNAP-authorized retailer list,
-      filtered to full-service stores (supermarkets and large, medium, and small grocery
-      stores). Convenience stores, specialty food stores, and pharmacies are excluded.
-      Food bank and WIC locations are maintained as manually curated static files,
-      updated annually.</p>
+    <div class="map-controls">
+      <p style="font-size:0.78rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:0.25rem;">Show layers</p>
+      <label>
+        <input type="checkbox" id="toggle-food" checked>
+        Distance to grocery (choropleth)
+      </label>
+      <label>
+        <input type="checkbox" id="toggle-groceries">
+        Grocery store locations
+      </label>
+      <label>
+        <input type="checkbox" id="toggle-foodbanks">
+        Food bank &amp; pantry locations
+      </label>
+      <label>
+        <input type="checkbox" id="toggle-wic">
+        WIC clinic locations
+      </label>
     </div>
-
+    <div class="legend">
+      <div class="legend-title">Distance to nearest grocery</div>
+      <div class="legend-scale">
+        <div class="legend-swatch" style="background:#d4ede9"></div>
+        <div class="legend-swatch" style="background:#96cfc8"></div>
+        <div class="legend-swatch" style="background:#5aadad"></div>
+        <div class="legend-swatch" style="background:#2d8080"></div>
+        <div class="legend-swatch" style="background:#2d6a6a"></div>
+        <div class="legend-swatch" style="background:#1a3d3d"></div>
+      </div>
+      <div class="legend-labels"><span>&lt; 0.5 mi</span><span>2+ mi</span></div>
+    </div>
+    <p style="font-size:0.75rem;color:var(--muted);">
+      Click any tract to see distance to nearest grocery, food desert status, and poverty rate.
+    </p>
   </div>
+</section>
 
-  <div class="page-nav">
-    <a href="housing.html">→ Housing Insecurity Analysis</a>
-    <a href="overlap.html">→ Combined Insecurity View</a>
-    <a href="index.html">← Back to Home</a>
+<section class="narrative">
+  <div class="narrative-text">
+    <h2>Two Definitions of a Food Desert</h2>
+    <p>
+      The USDA Food Desert Atlas uses a 1-mile urban threshold — if a meaningful
+      share of a low-income tract's residents live more than a mile from a
+      supermarket, the entire tract qualifies. The 0.5-mile threshold is
+      stricter: roughly a 10-minute walk, the distance at which access is
+      genuinely walkable.
+    </p>
+    <p>
+      This analysis shows both simultaneously. The gap between the two
+      thresholds reveals the "car-dependent access zone" — tracts where a
+      grocery store exists within a mile but is not within comfortable walking
+      distance. For residents without cars, that mile might as well be ten.
+    </p>
+    <p>
+      The SNAP retailer data captures the most current picture: updated monthly
+      from USDA FNS, it reflects store openings and closures as they happen.
+      The USDA Food Desert Atlas, by contrast, is updated every few years — so
+      the two sources occasionally disagree in rapidly changing neighborhoods.
+    </p>
   </div>
+  <div>
+    <div class="pullquote food-accent">
+      "The distance between a block group and its nearest grocery store is one of
+      the most legible measures of neighborhood disinvestment. It's also one of
+      the hardest to change."
+    </div>
+    <p style="font-size:0.8rem;color:var(--muted);margin-top:0.75rem;">
+      — Project framing note, CivicData SA
+    </p>
+  </div>
+</section>
 
-  <footer class="site-footer">
-    Built with open data · San Antonio, TX ·
-    <a href="https://github.com/civicdatasa">github.com/civicdatasa</a>
-  </footer>
+<section class="narrative" style="padding-top:0;">
+  <div class="narrative-text">
+    <h2>SNAP &amp; WIC as Outcome Proxies</h2>
+    <p>
+      SNAP (Supplemental Nutrition Assistance Program) participation rates are
+      included as an outcome proxy for food insecurity alongside spatial access
+      metrics. High SNAP participation in a tract indicates both elevated food
+      need and the presence of people already engaged with federal nutrition
+      support — a different kind of signal than distance alone.
+    </p>
+    <p>
+      WIC (Women, Infants, and Children) clinic locations serve a similar
+      purpose: high WIC participation in a neighborhood is a leading indicator
+      of food insecurity among young families. Clinic locations are shown on the
+      map as points; their presence (or absence) near high-distance tracts
+      highlights service coverage gaps.
+    </p>
+  </div>
+  <div class="narrative-text">
+    <h2>Food Banks &amp; Pantries</h2>
+    <p>
+      The San Antonio Food Bank operates one of the largest food distribution
+      networks in the country, supplemented by dozens of community pantries
+      served through 211 San Antonio. Food bank and pantry locations are shown
+      as points on the map — toggle them on to see how well they cover the
+      highest-distance tracts.
+    </p>
+    <p>
+      Where food bank locations are sparse in high-distance tracts, those are
+      the coverage gaps: places where both the market and the safety net are
+      thin. The combined view (link below) crosses these gaps with housing
+      insecurity data to identify the most vulnerable block groups.
+    </p>
+  </div>
+</section>
 
-  <script>
-    const map = L.map('map').setView([29.45, -98.50], 11);
+<div class="method-note">
+  <details>
+    <summary>Methodology note — food access distance analysis</summary>
+    <p>
+      Distance from each block group centroid to the nearest SNAP-authorized
+      full-service grocery store (supermarket, large, medium, or small grocery)
+      was computed using geodesic distance in the analysis notebook
+      <code>02_food_access.ipynb</code>. Store locations are sourced from the
+      USDA FNS SNAP retailer list, pulled monthly via the USDA ArcGIS open
+      data endpoint. Only stores classified as Supermarket, Large Grocery Store,
+      Medium Grocery Store, or Small Grocery Store are included; convenience
+      stores, specialty markets, and pharmacies are excluded.
+    </p>
+    <p>
+      The USDA Food Desert Atlas (2019 edition) provides tract-level food desert
+      designations (LILATracts_1And10 and LILATracts_halfAnd10) and is joined
+      to census tracts by FIPS code. Because the Atlas uses 2015 store data,
+      there may be discrepancies with the current SNAP retailer list in
+      neighborhoods where stores have opened or closed.
+    </p>
+  </details>
+</div>
 
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-      attribution: '© OpenStreetMap © CARTO',
-      maxZoom: 18
-    }).addTo(map);
+<section class="crosslink-strip">
+  <div class="crosslink-inner">
+    <a href="housing.html" class="crosslink-card">
+      <div class="card-tag">Analysis 1</div>
+      <h3>Housing Insecurity</h3>
+      <p>Cost burden, severe cost burden, and overcrowding across Bexar County block groups.</p>
+      <div class="arrow">→</div>
+    </a>
+    <a href="overlap.html" class="crosslink-card">
+      <div class="card-tag">Combined View</div>
+      <h3>Where Both Overlap</h3>
+      <p>The quadrant map: which neighborhoods are under pressure on both housing and food access?</p>
+      <div class="arrow">→</div>
+    </a>
+    <a href="index.html" class="crosslink-card">
+      <div class="card-tag">Project</div>
+      <h3>About This Analysis</h3>
+      <p>Data sources, methods, automated refresh schedule, and how to reproduce this work.</p>
+      <div class="arrow">→</div>
+    </a>
+  </div>
+</section>
 
-    function getColor(miles) {
-      if (miles === null || miles === undefined) return '#cccccc';
-      if (miles <= 0.5) return '#f7fcf5';
-      if (miles <= 1.0) return '#74c476';
-      if (miles <= 3.0) return '#238b45';
-      return '#00441b';
+<footer class="site-footer">
+  <span>Built with open data · <a href="mailto:civicdatasa@gmail.com">civicdatasa@gmail.com</a> · <a href="https://github.com/civicdatasa" target="_blank" rel="noopener">GitHub</a></span>
+  <span id="last-updated"></span>
+</footer>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="js/map.js"></script>
+<script src="js/site.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const map = L.map('map-food', {
+    center: [29.43, -98.49],
+    zoom: 11,
+  });
+
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png', {
+    attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, © <a href="https://carto.com/">CARTO</a>',
+    maxZoom: 18
+  }).addTo(map);
+
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}{r}.png', {
+    attribution: '', maxZoom: 18, pane: 'overlayPane'
+  }).addTo(map);
+
+  let foodLayer = null;
+  let groceryLayer = null, foodbankLayer = null, wicLayer = null;
+
+  // Food access choropleth
+  loadChoropleth(
+    map,
+    'data/food_access_tracts.geojson',
+    f => foodColor(f.properties.nearest_grocery_mi),
+    foodPopup
+  ).then(layer => {
+    foodLayer = layer;
+    if (layer) updateFoodStats(layer);
+  });
+
+  // Also load grocery store count for stat
+  fetch('data/grocery_stores_bexar.geojson')
+    .then(r => r.ok ? r.json() : null).catch(() => null)
+    .then(data => {
+      if (data && data.features) {
+        document.getElementById('stat-grocery').textContent = data.features.length;
+        // rough bar (max ~200 stores)
+        const pct = Math.min(Math.round(data.features.length / 2), 100);
+        document.getElementById('bar-grocery').dataset.pct = pct;
+        setTimeout(() => { document.getElementById('bar-grocery').style.width = pct + '%'; }, 200);
+      }
+    });
+
+  // Layer toggles
+  document.getElementById('toggle-food').addEventListener('change', e => {
+    if (foodLayer) { e.target.checked ? foodLayer.addTo(map) : map.removeLayer(foodLayer); }
+  });
+
+  document.getElementById('toggle-groceries').addEventListener('change', e => {
+    if (e.target.checked && !groceryLayer) {
+      loadPoints(map, 'data/grocery_stores_bexar.geojson', '#2c4a7c', 'Grocery store')
+        .then(l => { groceryLayer = l; });
+    } else if (!e.target.checked && groceryLayer) {
+      map.removeLayer(groceryLayer); groceryLayer = null;
     }
+  });
 
-    function style(feature) {
-      return {
-        fillColor: getColor(feature.properties.nearest_grocery_miles),
-        weight: 0.5,
-        opacity: 1,
-        color: '#999',
-        fillOpacity: 0.8
-      };
+  document.getElementById('toggle-foodbanks').addEventListener('change', e => {
+    if (e.target.checked && !foodbankLayer) {
+      loadPoints(map, 'data/food_banks_bexar.geojson', '#c0392b', 'Food bank / pantry')
+        .then(l => { foodbankLayer = l; });
+    } else if (!e.target.checked && foodbankLayer) {
+      map.removeLayer(foodbankLayer); foodbankLayer = null;
     }
+  });
 
-    function onEachFeature(feature, layer) {
-      const p = feature.properties;
-      const dist  = p.nearest_grocery_miles != null ? p.nearest_grocery_miles.toFixed(2) + ' mi' : 'N/A';
-      const store = p.nearest_grocery_name || 'N/A';
-      const fb    = p.nearest_food_bank_miles != null ? p.nearest_food_bank_miles.toFixed(2) + ' mi' : 'N/A';
-      const wic   = p.nearest_wic_miles != null ? p.nearest_wic_miles.toFixed(2) + ' mi' : 'N/A';
-      const usda  = p.LILATracts_1And10 === 1 ? 'Yes' : 'No';
-      const inc   = p.B19013_001E != null ? '$' + Number(p.B19013_001E).toLocaleString() : 'N/A';
-
-      layer.bindPopup(`
-        <div class="popup-title">Block Group ${p.GEOID}</div>
-        <div class="popup-row"><span class="popup-label">Nearest grocery</span><span>${dist}</span></div>
-        <div class="popup-row"><span class="popup-label">Store</span><span>${store}</span></div>
-        <div class="popup-row"><span class="popup-label">USDA food desert</span><span>${usda}</span></div>
-        <div class="popup-row"><span class="popup-label">Nearest food bank</span><span>${fb}</span></div>
-        <div class="popup-row"><span class="popup-label">Nearest WIC clinic</span><span>${wic}</span></div>
-        <div class="popup-row"><span class="popup-label">Median income</span><span>${inc}</span></div>
-      `);
-
-      layer.on('mouseover', function() { this.setStyle({ weight: 2, color: '#333' }); });
-      layer.on('mouseout',  function() { geojsonLayer.resetStyle(this); });
+  document.getElementById('toggle-wic').addEventListener('change', e => {
+    if (e.target.checked && !wicLayer) {
+      loadPoints(map, 'data/wic_clinics_bexar.geojson', '#e8a020', 'WIC clinic')
+        .then(l => { wicLayer = l; });
+    } else if (!e.target.checked && wicLayer) {
+      map.removeLayer(wicLayer); wicLayer = null;
     }
+  });
 
-    let geojsonLayer;
-    fetch('data/block_groups.geojson')
-      .then(r => r.json())
-      .then(data => {
-        geojsonLayer = L.geoJSON(data, { style, onEachFeature }).addTo(map);
-      });
+  function updateFoodStats(layer) {
+    const features = [];
+    layer.eachLayer(l => { if (l.feature) features.push(l.feature.properties); });
+    if (!features.length) return;
 
-    // Grocery store markers
-    fetch('data/grocery_stores.geojson')
-      .then(r => r.json())
-      .then(data => {
-        L.geoJSON(data, {
-          pointToLayer: function(feature, latlng) {
-            return L.circleMarker(latlng, {
-              radius: 5,
-              fillColor: '#fff',
-              color: '#238b45',
-              weight: 2,
-              fillOpacity: 1
-            });
-          },
-          onEachFeature: function(feature, layer) {
-            const p = feature.properties;
-            layer.bindPopup(`<strong>${p.Store_Name}</strong><br>${p.Store_Type}<br>${p.Store_Street_Address}`);
-          }
-        }).addTo(map);
-      });
+    const d1  = features.filter(p => p.LILATracts_1And10    === 1).length;
+    const d05 = features.filter(p => p.LILATracts_halfAnd10 === 1).length;
+    const pct1  = Math.round(d1  / features.length * 100);
+    const pct05 = Math.round(d05 / features.length * 100);
 
-    fetch('data/last_updated.json')
-      .then(r => r.json())
-      .then(d => {
-        const date = new Date(d.updated).toLocaleDateString('en-US', {
-          year: 'numeric', month: 'long', day: 'numeric'
-        });
-        document.getElementById('last-updated').textContent = 'Data last updated: ' + date;
-      })
-      .catch(() => {});
-  </script>
+    const dists = features.map(p => p.nearest_grocery_mi).filter(v => v != null && !isNaN(v));
+    const avgDist = dists.length ? (dists.reduce((a,b) => a+b, 0) / dists.length).toFixed(1) : null;
 
+    document.getElementById('stat-desert1').textContent  = pct1  + '%';
+    document.getElementById('stat-desert05').textContent = pct05 + '%';
+    document.getElementById('bar-desert1').dataset.pct   = pct1;
+    document.getElementById('bar-desert05').dataset.pct  = pct05;
+    setTimeout(() => {
+      document.getElementById('bar-desert1').style.width  = pct1  + '%';
+      document.getElementById('bar-desert05').style.width = pct05 + '%';
+    }, 200);
+
+    if (avgDist) {
+      document.getElementById('stat-avg-dist').textContent = avgDist + ' mi';
+      // bar: 0 mi = 0%, 2 mi = 100%
+      const distPct = Math.min(Math.round(parseFloat(avgDist) / 2 * 100), 100);
+      document.getElementById('bar-avg-dist').dataset.pct = distPct;
+      setTimeout(() => { document.getElementById('bar-avg-dist').style.width = distPct + '%'; }, 200);
+    }
+  }
+});
+</script>
 </body>
 </html>
