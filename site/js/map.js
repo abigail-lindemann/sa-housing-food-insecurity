@@ -22,7 +22,7 @@ function foodColor(miles) {
 function overlapColor(feature) {
   const p = feature.properties;
   const highHousing = (p.housing_score ?? 0) > 0.5;
-  const highFood    = (p.nearest_grocery_miles ?? p.nearest_grocery_mi ?? 0) > 1;
+  const highFood    = (p.nearest_grocery_miles ?? 0) > 1;
   if (highHousing && highFood) return '#7b2d2d';
   if (highHousing)             return '#2c4a7c';
   if (highFood)                return '#2d6a6a';
@@ -40,22 +40,19 @@ function housingPopup(props) {
   return `<div class="popup-inner">
     <strong>Block Group ${props.GEOID ?? ''}</strong>
     <div class="popup-row"><span>Housing insecurity score</span><span class="popup-val">${fmt(props.housing_score)}</span></div>
-    <div class="popup-row"><span>Cost burden rate</span><span class="popup-val">${pct(props.cost_burden_rate)}</span></div>
-    <div class="popup-row"><span>Severe cost burden</span><span class="popup-val">${pct(props.severe_cost_burden_rate)}</span></div>
-    <div class="popup-row"><span>Overcrowding rate</span><span class="popup-val">${pct(props.overcrowding_rate)}</span></div>
     <div class="popup-row"><span>Poverty rate</span><span class="popup-val">${pct(props.poverty_rate)}</span></div>
     <div class="popup-row"><span>Median household income</span><span class="popup-val">${income}</span></div>
   </div>`;
 }
 
 function foodPopup(props) {
-  const dist = props.nearest_grocery_miles ?? props.nearest_grocery_mi;
+  const dist = props.nearest_grocery_miles;
   const distStr = dist != null ? dist.toFixed(2) + ' mi' : '—';
   const desert1  = props.LILATracts_1And10    === 1 ? 'Yes' : 'No';
   const desert05 = props.LILATracts_halfAnd10 === 1 ? 'Yes' : 'No';
   const pct = v => v != null ? Math.round(v * 100) + '%' : '—';
   return `<div class="popup-inner">
-    <strong>Census Tract ${props.CensusTract ?? props.GEOID ?? ''}</strong>
+    <strong>Block Group ${props.GEOID ?? ''}</strong>
     <div class="popup-row"><span>Nearest grocery store</span><span class="popup-val">${distStr}</span></div>
     <div class="popup-row"><span>Food desert (1-mile)</span><span class="popup-val">${desert1}</span></div>
     <div class="popup-row"><span>Food desert (0.5-mile)</span><span class="popup-val">${desert05}</span></div>
@@ -64,7 +61,7 @@ function foodPopup(props) {
 }
 
 function overlapPopup(props) {
-  const dist = props.nearest_grocery_miles ?? props.nearest_grocery_mi;
+  const dist = props.nearest_grocery_miles;
   const distStr = dist != null ? dist.toFixed(2) + ' mi' : '—';
   const fmt  = v => v != null ? v.toFixed(2) : '—';
   const pct  = v => v != null ? Math.round(v * 100) + '%' : '—';
