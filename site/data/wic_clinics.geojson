@@ -1,0 +1,22 @@
+{
+"type": "FeatureCollection",
+"name": "wic_clinics",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "name": "WIC Clinic Grissom", "address": "9179 Grissom Rd Suite 147", "city": "San Antonio", "latitude": 29.5351, "longitude": -98.6497 }, "geometry": { "type": "Point", "coordinates": [ -98.6497, 29.5351 ] } },
+{ "type": "Feature", "properties": { "name": "WIC Clinic Zarzamora", "address": "4503 S Zarzamora", "city": "San Antonio", "latitude": 29.3748, "longitude": -98.5254 }, "geometry": { "type": "Point", "coordinates": [ -98.5254, 29.3748 ] } },
+{ "type": "Feature", "properties": { "name": "WIC Clinic South Flores", "address": "6723 South Flores", "city": "San Antonio", "latitude": 29.3551, "longitude": -98.5048 }, "geometry": { "type": "Point", "coordinates": [ -98.5048, 29.3551 ] } },
+{ "type": "Feature", "properties": { "name": "WIC Clinic SW Military", "address": "910 SW Military Dr", "city": "San Antonio", "latitude": 29.3648, "longitude": -98.5197 }, "geometry": { "type": "Point", "coordinates": [ -98.5197, 29.3648 ] } },
+{ "type": "Feature", "properties": { "name": "WIC Clinic San Saba", "address": "401 N San Saba St", "city": "San Antonio", "latitude": 29.4197, "longitude": -98.5148 }, "geometry": { "type": "Point", "coordinates": [ -98.5148, 29.4197 ] } },
+{ "type": "Feature", "properties": { "name": "WIC Clinic Buena Vista", "address": "2315 Buena Vista", "city": "San Antonio", "latitude": 29.4264, "longitude": -98.5254 }, "geometry": { "type": "Point", "coordinates": [ -98.5254, 29.4264 ] } },
+{ "type": "Feature", "properties": { "name": "WIC Clinic MLK", "address": "2802 MLK Dr", "city": "San Antonio", "latitude": 29.4297, "longitude": -98.4648 }, "geometry": { "type": "Point", "coordinates": [ -98.4648, 29.4297 ] } },
+{ "type": "Feature", "properties": { "name": "WIC Clinic Popping Drive", "address": "5055 Popping Dr", "city": "San Antonio", "latitude": 29.5048, "longitude": -98.5697 }, "geometry": { "type": "Point", "coordinates": [ -98.5697, 29.5048 ] } },
+{ "type": "Feature", "properties": { "name": "WIC Clinic Babcock", "address": "5500 Babcock Rd", "city": "San Antonio", "latitude": 29.5348, "longitude": -98.5997 }, "geometry": { "type": "Point", "coordinates": [ -98.5997, 29.5348 ] } },
+{ "type": "Feature", "properties": { "name": "WIC Clinic Rittiman", "address": "4343 Rittiman Rd", "city": "San Antonio", "latitude": 29.5148, "longitude": -98.4248 }, "geometry": { "type": "Point", "coordinates": [ -98.4248, 29.5148 ] } },
+{ "type": "Feature", "properties": { "name": "WIC Clinic Pecan Valley", "address": "802 Pecan Valley Dr", "city": "San Antonio", "latitude": 29.4048, "longitude": -98.4348 }, "geometry": { "type": "Point", "coordinates": [ -98.4348, 29.4048 ] } },
+{ "type": "Feature", "properties": { "name": "WIC Clinic Callaghan", "address": "4412 Callaghan Rd", "city": "San Antonio", "latitude": 29.4748, "longitude": -98.5797 }, "geometry": { "type": "Point", "coordinates": [ -98.5797, 29.4748 ] } },
+{ "type": "Feature", "properties": { "name": "WIC Clinic W Military", "address": "7424 W Military Dr", "city": "San Antonio", "latitude": 29.4551, "longitude": -98.6297 }, "geometry": { "type": "Point", "coordinates": [ -98.6297, 29.4551 ] } },
+{ "type": "Feature", "properties": { "name": "WIC Clinic Walzem", "address": "5255 Walzem Rd", "city": "San Antonio", "latitude": 29.5197, "longitude": -98.3948 }, "geometry": { "type": "Point", "coordinates": [ -98.3948, 29.5197 ] } },
+{ "type": "Feature", "properties": { "name": "WIC Clinic Castroville", "address": "803 Castroville Rd", "city": "San Antonio", "latitude": 29.4297, "longitude": -98.5597 }, "geometry": { "type": "Point", "coordinates": [ -98.5597, 29.4297 ] } }
+]
+}

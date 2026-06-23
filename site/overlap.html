@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Combined Insecurity View — CivicData SA</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+</head>
+<body>
+
+  <header class="site-header">
+    <span class="brand">CIVICDATA SA</span>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="housing.html">Housing</a>
+      <a href="food.html">Food Access</a>
+    </nav>
+  </header>
+
+  <div class="page-hero">
+    <h1>Where Housing and Food Insecurity Overlap</h1>
+    <p class="subtitle">Neighborhoods under pressure on both dimensions · CivicData SA</p>
+    <p class="last-updated" id="last-updated"></p>
+  </div>
+
+  <div class="map-wrap">
+    <div id="map"></div>
+    <div class="map-legend">
+      <strong>Insecurity Quadrant</strong><br>
+      <span class="legend-swatch" style="background:#7b2d8b"></span> High Housing + High Food<br>
+      <span class="legend-swatch" style="background:#c0392b"></span> High Housing Only<br>
+      <span class="legend-swatch" style="background:#2471a3"></span> High Food Only<br>
+      <span class="legend-swatch" style="background:#e8e4dc"></span> Low Both<br>
+      <span class="legend-swatch" style="background:#ccc"></span> No data
+    </div>
+  </div>
+
+  <div class="content-wrap">
+
+    <div class="stat-row">
+      <div class="stat-box">
+        <div class="number">155</div>
+        <div class="label">block groups with high housing AND food insecurity</div>
+      </div>
+      <div class="stat-box">
+        <div class="number">461</div>
+        <div class="label">block groups with high food insecurity only</div>
+      </div>
+      <div class="stat-box">
+        <div class="number">122</div>
+        <div class="label">block groups with high housing insecurity only</div>
+      </div>
+      <div class="stat-box">
+        <div class="number">72</div>
+        <div class="label">dual-insecurity block groups also far from food banks and WIC</div>
+      </div>
+    </div>
+
+    <div class="narrative">
+      <p>155 block groups in Bexar County — 13.6 percent of all neighborhoods — show high
+      insecurity on both housing and food dimensions simultaneously. These are the areas where
+      families face the highest combined pressure: paying more than they can afford for housing
+      while also living far from a grocery store.</p>
+
+      <h2>What the map shows</h2>
+      <p>Each block group is classified into one of four quadrants based on its housing
+      insecurity score (top 25% = high) and food access score (beyond 1 mile or USDA food
+      desert = high). Purple indicates dual insecurity — the most vulnerable neighborhoods.
+      Click any block group to see its full profile.</p>
+
+      <h2>The dual-insecurity neighborhoods</h2>
+      <p>The 155 dual-insecurity block groups are not randomly distributed. They concentrate
+      on the South and West sides of San Antonio, in areas with median household incomes
+      below $35,000 and Hispanic population shares above 80 percent. These neighborhoods
+      face compounding disadvantages: high housing costs relative to income, and limited
+      access to affordable food.</p>
+
+      <h2>Service gaps</h2>
+      <p>Of the 155 dual-insecurity block groups, 72 are also more than 3 miles from both
+      a food bank and a WIC clinic. These are the neighborhoods with the least access to
+      the support systems designed to help. The average dual-insecurity block group is
+      4.7 miles from a food bank — nearly a mile further than the county average.</p>
+
+      <h2>High food insecurity only</h2>
+      <p>The 461 block groups with high food insecurity but lower housing stress are largely
+      in the outer suburbs and rapidly developing areas where new housing has outpaced
+      grocery infrastructure. These areas have relatively higher incomes but still face
+      significant distance barriers to fresh food.</p>
+    </div>
+
+  </div>
+
+  <div class="page-nav">
+    <a href="housing.html">→ Housing Insecurity Analysis</a>
+    <a href="food.html">→ Food Access Analysis</a>
+    <a href="index.html">← Back to Home</a>
+  </div>
+
+  <footer class="site-footer">
+    Built with open data · San Antonio, TX ·
+    <a href="https://github.com/civicdatasa">github.com/civicdatasa</a>
+  </footer>
+
+  <script>
+    const map = L.map('map').setView([29.45, -98.50], 11);
+
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+      attribution: '© OpenStreetMap © CARTO',
+      maxZoom: 18
+    }).addTo(map);
+
+    function getColor(quadrant) {
+      switch(quadrant) {
+        case 'High Housing + High Food': return '#7b2d8b';
+        case 'High Housing Only':        return '#c0392b';
+        case 'High Food Only':           return '#2471a3';
+        case 'Low Both':                 return '#e8e4dc';
+        default:                         return '#cccccc';
+      }
+    }
+
+    function style(feature) {
+      return {
+        fillColor: getColor(feature.properties.quadrant),
+        weight: 0.5,
+        opacity: 1,
+        color: '#999',
+        fillOpacity: 0.85
+      };
+    }
+
+    function onEachFeature(feature, layer) {
+      const p = feature.properties;
+      const q       = p.quadrant || 'Unknown';
+      const hscore  = p.housing_score != null ? p.housing_score.toFixed(3) : 'N/A';
+      const gdist   = p.nearest_grocery_miles != null ? p.nearest_grocery_miles.toFixed(2) + ' mi' : 'N/A';
+      const fbdist  = p.nearest_food_bank_miles != null ? p.nearest_food_bank_miles.toFixed(2) + ' mi' : 'N/A';
+      const wicdist = p.nearest_wic_miles != null ? p.nearest_wic_miles.toFixed(2) + ' mi' : 'N/A';
+      const inc     = p.B19013_001E != null ? '$' + Number(p.B19013_001E).toLocaleString() : 'N/A';
+      const pov     = p.poverty_rate != null ? (p.poverty_rate * 100).toFixed(1) + '%' : 'N/A';
+      const hisp    = p.pct_hispanic != null ? (p.pct_hispanic * 100).toFixed(1) + '%' : 'N/A';
+      const gap     = p.service_gap === 1 ? 'Yes' : 'No';
+
+      layer.bindPopup(`
+        <div class="popup-title">Block Group ${p.GEOID}</div>
+        <div class="popup-row"><span class="popup-label">Quadrant</span><span>${q}</span></div>
+        <div class="popup-row"><span class="popup-label">Housing score</span><span>${hscore}</span></div>
+        <div class="popup-row"><span class="popup-label">Nearest grocery</span><span>${gdist}</span></div>
+        <div class="popup-row"><span class="popup-label">Nearest food bank</span><span>${fbdist}</span></div>
+        <div class="popup-row"><span class="popup-label">Nearest WIC</span><span>${wicdist}</span></div>
+        <div class="popup-row"><span class="popup-label">Median income</span><span>${inc}</span></div>
+        <div class="popup-row"><span class="popup-label">Poverty rate</span><span>${pov}</span></div>
+        <div class="popup-row"><span class="popup-label">% Hispanic</span><span>${hisp}</span></div>
+        <div class="popup-row"><span class="popup-label">Service gap</span><span>${gap}</span></div>
+      `);
+
+      layer.on('mouseover', function() { this.setStyle({ weight: 2, color: '#333' }); });
+      layer.on('mouseout',  function() { geojsonLayer.resetStyle(this); });
+    }
+
+    let geojsonLayer;
+    fetch('data/block_groups.geojson')
+      .then(r => r.json())
+      .then(data => {
+        geojsonLayer = L.geoJSON(data, { style, onEachFeature }).addTo(map);
+      });
+
+    fetch('data/last_updated.json')
+      .then(r => r.json())
+      .then(d => {
+        const date = new Date(d.updated).toLocaleDateString('en-US', {
+          year: 'numeric', month: 'long', day: 'numeric'
+        });
+        document.getElementById('last-updated').textContent = 'Data last updated: ' + date;
+      })
+      .catch(() => {});
+  </script>
+
+</body>
+</html>

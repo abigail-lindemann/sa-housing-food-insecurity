@@ -1,0 +1,172 @@
+/* ── Reset & base ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Georgia', serif;
+  font-size: 18px;
+  line-height: 1.7;
+  color: #1a1a1a;
+  background: #fff;
+}
+
+a { color: #c0392b; text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* ── Layout ── */
+.site-header {
+  background: #1a1a1a;
+  color: #fff;
+  padding: 1rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.site-header .brand { font-size: 0.85rem; letter-spacing: 0.08em; opacity: 0.7; }
+.site-header nav a { color: #fff; margin-left: 1.5rem; font-size: 0.9rem; opacity: 0.8; }
+.site-header nav a:hover { opacity: 1; text-decoration: none; }
+
+.page-hero {
+  background: #1a1a1a;
+  color: #fff;
+  padding: 3rem 2rem 2.5rem;
+  max-width: 100%;
+}
+
+.page-hero h1 { font-size: 2.2rem; line-height: 1.2; max-width: 700px; }
+.page-hero .subtitle { margin-top: 0.75rem; opacity: 0.7; font-size: 1rem; font-family: sans-serif; }
+.page-hero .last-updated { margin-top: 0.5rem; opacity: 0.5; font-size: 0.8rem; font-family: sans-serif; }
+
+.content-wrap { max-width: 740px; margin: 0 auto; padding: 2.5rem 2rem; }
+
+/* ── Map ── */
+#map { width: 100%; height: 520px; background: #e8e4dc; }
+
+.map-wrap { position: relative; }
+
+.map-legend {
+  position: absolute;
+  bottom: 2rem;
+  right: 1rem;
+  background: rgba(255,255,255,0.95);
+  padding: 0.75rem 1rem;
+  font-family: sans-serif;
+  font-size: 0.78rem;
+  line-height: 1.8;
+  z-index: 999;
+  border: 1px solid #ddd;
+}
+
+.legend-swatch {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  margin-right: 6px;
+  vertical-align: middle;
+}
+
+/* ── Stat callouts ── */
+.stat-row {
+  display: flex;
+  gap: 1.5rem;
+  margin: 2.5rem 0;
+  flex-wrap: wrap;
+}
+
+.stat-box {
+  flex: 1;
+  min-width: 160px;
+  border-top: 3px solid #c0392b;
+  padding-top: 0.75rem;
+}
+
+.stat-box .number {
+  font-size: 2.4rem;
+  font-weight: bold;
+  line-height: 1;
+  color: #c0392b;
+  font-family: sans-serif;
+}
+
+.stat-box .label {
+  font-size: 0.85rem;
+  font-family: sans-serif;
+  color: #555;
+  margin-top: 0.25rem;
+}
+
+/* ── Narrative text ── */
+.narrative { margin: 2rem 0; }
+.narrative p { margin-bottom: 1.25rem; }
+.narrative h2 { font-size: 1.3rem; margin: 2rem 0 0.75rem; border-bottom: 1px solid #eee; padding-bottom: 0.4rem; }
+
+/* ── Popup ── */
+.mapboxgl-popup-content, .leaflet-popup-content {
+  font-family: sans-serif;
+  font-size: 0.85rem;
+  line-height: 1.6;
+  max-width: 220px;
+}
+
+.popup-title { font-weight: bold; margin-bottom: 0.4rem; font-size: 0.9rem; }
+.popup-row { display: flex; justify-content: space-between; gap: 1rem; }
+.popup-label { color: #777; }
+
+/* ── Page nav ── */
+.page-nav {
+  background: #f5f3ef;
+  padding: 1.5rem 2rem;
+  font-family: sans-serif;
+  font-size: 0.9rem;
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+  border-top: 1px solid #ddd;
+}
+
+.page-nav a {
+  color: #1a1a1a;
+  font-weight: bold;
+}
+
+/* ── Footer ── */
+.site-footer {
+  background: #1a1a1a;
+  color: #fff;
+  padding: 2rem;
+  font-family: sans-serif;
+  font-size: 0.8rem;
+  opacity: 0.85;
+  margin-top: 4rem;
+}
+
+.site-footer a { color: #fff; text-decoration: underline; }
+
+/* ── Index page cards ── */
+.analysis-grid { display: flex; gap: 2rem; margin: 2.5rem 0; flex-wrap: wrap; }
+
+.analysis-card {
+  flex: 1;
+  min-width: 260px;
+  border: 1px solid #ddd;
+  padding: 1.5rem;
+  font-family: sans-serif;
+}
+
+.analysis-card h2 { font-size: 1.1rem; margin-bottom: 0.5rem; }
+.analysis-card p { font-size: 0.9rem; color: #555; margin-bottom: 1rem; }
+.analysis-card a.btn {
+  display: inline-block;
+  background: #c0392b;
+  color: #fff;
+  padding: 0.4rem 1rem;
+  font-size: 0.85rem;
+}
+
+/* ── Responsive ── */
+@media (max-width: 600px) {
+  .page-hero h1 { font-size: 1.5rem; }
+  #map { height: 380px; }
+  .stat-row { gap: 1rem; }
+  .stat-box .number { font-size: 1.8rem; }
+}
