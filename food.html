@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Food Access — CivicData SA</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+</head>
+<body>
+
+  <header class="site-header">
+    <span class="brand">CIVICDATA SA</span>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="housing.html">Housing</a>
+      <a href="overlap.html">Combined View</a>
+    </nav>
+  </header>
+
+  <div class="page-hero">
+    <h1>Food Access in San Antonio</h1>
+    <p class="subtitle">Grocery store distance, food deserts, and service gaps across Bexar County · CivicData SA</p>
+    <p class="last-updated" id="last-updated"></p>
+  </div>
+
+  <div class="map-wrap">
+    <div id="map"></div>
+    <div class="map-legend">
+      <strong>Distance to Nearest Grocery Store</strong><br>
+      <span class="legend-swatch" style="background:#f7fcf5"></span> Within 0.5 mi<br>
+      <span class="legend-swatch" style="background:#74c476"></span> 0.5–1.0 mi<br>
+      <span class="legend-swatch" style="background:#238b45"></span> 1.0–3.0 mi<br>
+      <span class="legend-swatch" style="background:#00441b"></span> Beyond 3.0 mi<br>
+      <span class="legend-swatch" style="background:#e8e4dc; border:1px solid #ccc"></span> Grocery store
+    </div>
+  </div>
+
+  <div class="content-wrap">
+
+    <div class="stat-row">
+      <div class="stat-box">
+        <div class="number">544</div>
+        <div class="label">block groups with no grocery store within 1 mile</div>
+      </div>
+      <div class="stat-box">
+        <div class="number">191</div>
+        <div class="label">block groups within a 10-minute walk of a grocery store</div>
+      </div>
+      <div class="stat-box">
+        <div class="number">222</div>
+        <div class="label">block groups in USDA-designated food deserts</div>
+      </div>
+      <div class="stat-box">
+        <div class="number">13.8 mi</div>
+        <div class="label">maximum distance to nearest grocery store in Bexar County</div>
+      </div>
+    </div>
+
+    <div class="narrative">
+      <p>More than half of Bexar County's neighborhoods have no full-service grocery store
+      within a mile — the threshold the USDA uses to define a food desert in urban areas.
+      For the 191 block groups within half a mile of a store, grocery access is walkable.
+      For the 544 beyond a mile, getting food requires a car, a bus ride, or a long walk.</p>
+
+      <h2>What the map shows</h2>
+      <p>Block groups are shaded by distance to the nearest SNAP-authorized full-service
+      grocery store. Darker green indicates worse access. Grocery store locations are shown
+      as markers. Click any block group to see its distance to the nearest store, food bank,
+      and WIC clinic.</p>
+
+      <h2>The USDA standard vs. our measure</h2>
+      <p>The USDA Food Desert Atlas designates 222 Bexar County block groups as food deserts —
+      areas that are both low-income and low-access. Our distance-based measure identifies
+      544 block groups beyond the 1-mile threshold, including higher-income areas where
+      residents still face long distances to grocery stores. The two measures together
+      capture different dimensions of the same problem.</p>
+
+      <h2>Food banks and WIC clinics</h2>
+      <p>San Antonio's 10 food bank and pantry locations and 15 WIC clinics are unevenly
+      distributed across the county. The average block group is 4 miles from a food bank
+      and 3.3 miles from a WIC clinic. In dual-insecurity neighborhoods — those with both
+      high housing cost burden and poor grocery access — the average distance to a food
+      bank rises to 4.7 miles.</p>
+
+      <h2>Data notes</h2>
+      <p>Grocery store locations are drawn from the USDA SNAP-authorized retailer list,
+      filtered to full-service stores (supermarkets and large, medium, and small grocery
+      stores). Convenience stores, specialty food stores, and pharmacies are excluded.
+      Food bank and WIC locations are maintained as manually curated static files,
+      updated annually.</p>
+    </div>
+
+  </div>
+
+  <div class="page-nav">
+    <a href="housing.html">→ Housing Insecurity Analysis</a>
+    <a href="overlap.html">→ Combined Insecurity View</a>
+    <a href="index.html">← Back to Home</a>
+  </div>
+
+  <footer class="site-footer">
+    Built with open data · San Antonio, TX ·
+    <a href="https://github.com/civicdatasa">github.com/civicdatasa</a>
+  </footer>
+
+  <script>
+    const map = L.map('map').setView([29.45, -98.50], 11);
+
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+      attribution: '© OpenStreetMap © CARTO',
+      maxZoom: 18
+    }).addTo(map);
+
+    function getColor(miles) {
+      if (miles === null || miles === undefined) return '#cccccc';
+      if (miles <= 0.5) return '#f7fcf5';
+      if (miles <= 1.0) return '#74c476';
+      if (miles <= 3.0) return '#238b45';
+      return '#00441b';
+    }
+
+    function style(feature) {
+      return {
+        fillColor: getColor(feature.properties.nearest_grocery_miles),
+        weight: 0.5,
+        opacity: 1,
+        color: '#999',
+        fillOpacity: 0.8
+      };
+    }
+
+    function onEachFeature(feature, layer) {
+      const p = feature.properties;
+      const dist  = p.nearest_grocery_miles != null ? p.nearest_grocery_miles.toFixed(2) + ' mi' : 'N/A';
+      const store = p.nearest_grocery_name || 'N/A';
+      const fb    = p.nearest_food_bank_miles != null ? p.nearest_food_bank_miles.toFixed(2) + ' mi' : 'N/A';
+      const wic   = p.nearest_wic_miles != null ? p.nearest_wic_miles.toFixed(2) + ' mi' : 'N/A';
+      const usda  = p.LILATracts_1And10 === 1 ? 'Yes' : 'No';
+      const inc   = p.B19013_001E != null ? '$' + Number(p.B19013_001E).toLocaleString() : 'N/A';
+
+      layer.bindPopup(`
+        <div class="popup-title">Block Group ${p.GEOID}</div>
+        <div class="popup-row"><span class="popup-label">Nearest grocery</span><span>${dist}</span></div>
+        <div class="popup-row"><span class="popup-label">Store</span><span>${store}</span></div>
+        <div class="popup-row"><span class="popup-label">USDA food desert</span><span>${usda}</span></div>
+        <div class="popup-row"><span class="popup-label">Nearest food bank</span><span>${fb}</span></div>
+        <div class="popup-row"><span class="popup-label">Nearest WIC clinic</span><span>${wic}</span></div>
+        <div class="popup-row"><span class="popup-label">Median income</span><span>${inc}</span></div>
+      `);
+
+      layer.on('mouseover', function() { this.setStyle({ weight: 2, color: '#333' }); });
+      layer.on('mouseout',  function() { geojsonLayer.resetStyle(this); });
+    }
+
+    let geojsonLayer;
+    fetch('data/block_groups.geojson')
+      .then(r => r.json())
+      .then(data => {
+        geojsonLayer = L.geoJSON(data, { style, onEachFeature }).addTo(map);
+      });
+
+    // Grocery store markers
+    fetch('data/grocery_stores.geojson')
+      .then(r => r.json())
+      .then(data => {
+        L.geoJSON(data, {
+          pointToLayer: function(feature, latlng) {
+            return L.circleMarker(latlng, {
+              radius: 5,
+              fillColor: '#fff',
+              color: '#238b45',
+              weight: 2,
+              fillOpacity: 1
+            });
+          },
+          onEachFeature: function(feature, layer) {
+            const p = feature.properties;
+            layer.bindPopup(`<strong>${p.Store_Name}</strong><br>${p.Store_Type}<br>${p.Store_Street_Address}`);
+          }
+        }).addTo(map);
+      });
+
+    fetch('data/last_updated.json')
+      .then(r => r.json())
+      .then(d => {
+        const date = new Date(d.updated).toLocaleDateString('en-US', {
+          year: 'numeric', month: 'long', day: 'numeric'
+        });
+        document.getElementById('last-updated').textContent = 'Data last updated: ' + date;
+      })
+      .catch(() => {});
+  </script>
+
+</body>
+</html>

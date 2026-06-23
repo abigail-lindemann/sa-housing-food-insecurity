@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Housing Insecurity — CivicData SA</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+</head>
+<body>
+
+  <header class="site-header">
+    <span class="brand">CIVICDATA SA</span>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="food.html">Food Access</a>
+      <a href="overlap.html">Combined View</a>
+    </nav>
+  </header>
+
+  <div class="page-hero">
+    <h1>Housing Insecurity in San Antonio</h1>
+    <p class="subtitle">Cost burden, overcrowding, and rent stress across Bexar County · CivicData SA</p>
+    <p class="last-updated" id="last-updated"></p>
+  </div>
+
+  <div class="map-wrap">
+    <div id="map"></div>
+    <div class="map-legend">
+      <strong>Housing Insecurity Score</strong><br>
+      <span class="legend-swatch" style="background:#fff5f0"></span> Low (0.0–0.25)<br>
+      <span class="legend-swatch" style="background:#fcbba1"></span> Moderate (0.25–0.5)<br>
+      <span class="legend-swatch" style="background:#fb6a4a"></span> High (0.5–0.75)<br>
+      <span class="legend-swatch" style="background:#a50f15"></span> Very High (0.75–1.0)<br>
+      <span class="legend-swatch" style="background:#ccc"></span> No data
+    </div>
+  </div>
+
+  <div class="content-wrap">
+
+    <div class="stat-row">
+      <div class="stat-box">
+        <div class="number">277</div>
+        <div class="label">block groups with high housing insecurity</div>
+      </div>
+      <div class="stat-box">
+        <div class="number">46.5%</div>
+        <div class="label">average share of renters cost-burdened countywide</div>
+      </div>
+      <div class="stat-box">
+        <div class="number">22.7%</div>
+        <div class="label">average severe cost burden rate (>50% income on rent)</div>
+      </div>
+    </div>
+
+    <div class="narrative">
+      <p>Across Bexar County, nearly half of all renters spend more than 30 percent of their
+      income on housing — the federal threshold for cost burden. In the hardest-hit neighborhoods,
+      that share climbs above 70 percent. Cost burden is not evenly distributed: it concentrates
+      on the East, South, and West sides of San Antonio, in areas with median household incomes
+      below $35,000.</p>
+
+      <h2>What the map shows</h2>
+      <p>Each block group is shaded by its housing insecurity score — a composite of renter cost
+      burden rate, severe cost burden rate (paying more than 50% of income on housing), and
+      overcrowding rate. Darker red indicates higher insecurity. Click any block group to see
+      its individual scores.</p>
+
+      <h2>Cost burden and income</h2>
+      <p>The relationship between income and housing cost burden is stark. Block groups with
+      median household incomes below $30,000 show cost burden rates above 60 percent on average.
+      Above $60,000, that rate drops below 25 percent. Housing stress in San Antonio is
+      overwhelmingly concentrated among low-income renters.</p>
+
+      <h2>Overcrowding</h2>
+      <p>Overcrowding — defined as more than one person per room — affects a smaller share of
+      households but clusters intensely in specific neighborhoods. The highest overcrowding rates
+      appear in areas with large immigrant and Hispanic populations on the West and South sides,
+      where families double up due to housing cost pressure.</p>
+
+      <h2>A note on eviction data</h2>
+      <p>Eviction filing rates were evaluated as a fourth indicator but could not be included
+      in this version: the Eviction Lab at Princeton no longer provides public bulk downloads
+      for Texas census tracts. A future update will incorporate eviction data from
+      Texas Housers (texashousers.org), which tracks Bexar County filings annually via
+      the Texas Public Information Act.</p>
+    </div>
+
+  </div>
+
+  <div class="page-nav">
+    <a href="food.html">→ Food Access Analysis</a>
+    <a href="overlap.html">→ Combined Insecurity View</a>
+    <a href="index.html">← Back to Home</a>
+  </div>
+
+  <footer class="site-footer">
+    Built with open data · San Antonio, TX ·
+    <a href="https://github.com/civicdatasa">github.com/civicdatasa</a>
+  </footer>
+
+  <script>
+    // ── Map setup ──
+    const map = L.map('map').setView([29.45, -98.50], 11);
+
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+      attribution: '© OpenStreetMap © CARTO',
+      maxZoom: 18
+    }).addTo(map);
+
+    // ── Color scale ──
+    function getColor(score) {
+      if (score === null || score === undefined) return '#cccccc';
+      if (score >= 0.75) return '#a50f15';
+      if (score >= 0.50) return '#fb6a4a';
+      if (score >= 0.25) return '#fcbba1';
+      return '#fff5f0';
+    }
+
+    function style(feature) {
+      return {
+        fillColor: getColor(feature.properties.housing_score),
+        weight: 0.5,
+        opacity: 1,
+        color: '#999',
+        fillOpacity: 0.8
+      };
+    }
+
+    // ── Popup ──
+    function onEachFeature(feature, layer) {
+      const p = feature.properties;
+      const score    = p.housing_score != null ? p.housing_score.toFixed(3) : 'N/A';
+      const cb       = p.cost_burden_rate != null ? (p.cost_burden_rate * 100).toFixed(1) + '%' : 'N/A';
+      const scb      = p.severe_cost_burden_rate != null ? (p.severe_cost_burden_rate * 100).toFixed(1) + '%' : 'N/A';
+      const oc       = p.overcrowding_rate != null ? (p.overcrowding_rate * 100).toFixed(1) + '%' : 'N/A';
+      const inc      = p.B19013_001E != null ? '$' + Number(p.B19013_001E).toLocaleString() : 'N/A';
+      const pov      = p.poverty_rate != null ? (p.poverty_rate * 100).toFixed(1) + '%' : 'N/A';
+
+      layer.bindPopup(`
+        <div class="popup-title">Block Group ${p.GEOID}</div>
+        <div class="popup-row"><span class="popup-label">Housing score</span><span>${score}</span></div>
+        <div class="popup-row"><span class="popup-label">Cost burden</span><span>${cb}</span></div>
+        <div class="popup-row"><span class="popup-label">Severe cost burden</span><span>${scb}</span></div>
+        <div class="popup-row"><span class="popup-label">Overcrowding</span><span>${oc}</span></div>
+        <div class="popup-row"><span class="popup-label">Median income</span><span>${inc}</span></div>
+        <div class="popup-row"><span class="popup-label">Poverty rate</span><span>${pov}</span></div>
+      `);
+
+      layer.on('mouseover', function() { this.setStyle({ weight: 2, color: '#333' }); });
+      layer.on('mouseout',  function() { geojsonLayer.resetStyle(this); });
+    }
+
+    // ── Load GeoJSON ──
+    let geojsonLayer;
+    fetch('data/block_groups.geojson')
+      .then(r => r.json())
+      .then(data => {
+        geojsonLayer = L.geoJSON(data, { style, onEachFeature }).addTo(map);
+      })
+      .catch(err => console.error('Failed to load GeoJSON:', err));
+
+    // ── Last updated badge ──
+    fetch('data/last_updated.json')
+      .then(r => r.json())
+      .then(d => {
+        const date = new Date(d.updated).toLocaleDateString('en-US', {
+          year: 'numeric', month: 'long', day: 'numeric'
+        });
+        document.getElementById('last-updated').textContent = 'Data last updated: ' + date;
+      })
+      .catch(() => {});
+  </script>
+
+</body>
+</html>
