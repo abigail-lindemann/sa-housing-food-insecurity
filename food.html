@@ -133,6 +133,16 @@
       the two sources occasionally disagree in rapidly changing neighborhoods.
     </p>
   </div>
+  <div>
+    <div class="pullquote food-accent">
+      "The distance between a block group and its nearest grocery store is one of
+      the most legible measures of neighborhood disinvestment. It's also one of
+      the hardest to change."
+    </div>
+    <p style="font-size:0.8rem;color:var(--muted);margin-top:0.75rem;">
+      — Project framing note, CivicData SA
+    </p>
+  </div>
 </section>
 
 <section class="narrative" style="padding-top:0;">
@@ -247,8 +257,8 @@ document.addEventListener('DOMContentLoaded', () => {
   // Food access choropleth
   loadChoropleth(
     map,
-    'data/block_groups.geojson',
-    f => foodColor(f.properties.nearest_grocery_mi),
+    'data/food_access_tracts.geojson',
+    f => foodColor(f.properties.nearest_grocery_miles),
     foodPopup
   ).then(layer => {
     foodLayer = layer;
@@ -256,7 +266,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // Also load grocery store count for stat
-  fetch('data/grocery_stores.geojson')
+  fetch('data/grocery_stores_bexar.geojson')
     .then(r => r.ok ? r.json() : null).catch(() => null)
     .then(data => {
       if (data && data.features) {
@@ -275,7 +285,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   document.getElementById('toggle-groceries').addEventListener('change', e => {
     if (e.target.checked && !groceryLayer) {
-      loadPoints(map, 'data/grocery_stores.geojson', '#2c4a7c', 'Grocery store')
+      loadPoints(map, 'data/grocery_stores_bexar.geojson', '#2c4a7c', 'Grocery store')
         .then(l => { groceryLayer = l; });
     } else if (!e.target.checked && groceryLayer) {
       map.removeLayer(groceryLayer); groceryLayer = null;
@@ -284,7 +294,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   document.getElementById('toggle-foodbanks').addEventListener('change', e => {
     if (e.target.checked && !foodbankLayer) {
-      loadPoints(map, 'data/food_banks.geojson', '#c0392b', 'Food bank / pantry')
+      loadPoints(map, 'data/food_banks_bexar.geojson', '#c0392b', 'Food bank / pantry')
         .then(l => { foodbankLayer = l; });
     } else if (!e.target.checked && foodbankLayer) {
       map.removeLayer(foodbankLayer); foodbankLayer = null;
@@ -293,7 +303,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   document.getElementById('toggle-wic').addEventListener('change', e => {
     if (e.target.checked && !wicLayer) {
-      loadPoints(map, 'data/wic_clinics.geojson', '#e8a020', 'WIC clinic')
+      loadPoints(map, 'data/wic_clinics_bexar.geojson', '#e8a020', 'WIC clinic')
         .then(l => { wicLayer = l; });
     } else if (!e.target.checked && wicLayer) {
       map.removeLayer(wicLayer); wicLayer = null;
@@ -310,7 +320,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const pct1  = Math.round(d1  / features.length * 100);
     const pct05 = Math.round(d05 / features.length * 100);
 
-    const dists = features.map(p => p.nearest_grocery_mi).filter(v => v != null && !isNaN(v));
+    const dists = features.map(p => p.nearest_grocery_miles).filter(v => v != null && !isNaN(v));
     const avgDist = dists.length ? (dists.reduce((a,b) => a+b, 0) / dists.length).toFixed(1) : null;
 
     document.getElementById('stat-desert1').textContent  = pct1  + '%';
