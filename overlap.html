@@ -228,7 +228,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   loadChoropleth(
     map,
-    'data/overlap_block_groups.geojson',
+    'data/block_groups.geojson',
     overlapColor,
     overlapPopup
   ).then(layer => {
@@ -241,8 +241,8 @@ document.addEventListener('DOMContentLoaded', () => {
       // Load both food banks and WIC into one layer group
       const group = L.layerGroup().addTo(map);
       Promise.all([
-        loadPoints(null, 'data/food_banks_bexar.geojson', '#c0392b', 'Food bank / pantry'),
-        loadPoints(null, 'data/wic_clinics_bexar.geojson', '#e8a020', 'WIC clinic'),
+        loadPoints(null, 'data/food_banks.geojson', '#c0392b', 'Food bank / pantry'),
+        loadPoints(null, 'data/wic_clinics.geojson', '#e8a020', 'WIC clinic'),
       ]).then(([fb, wic]) => {
         if (fb)  { fb.addTo(map);  }
         if (wic) { wic.addTo(map); }

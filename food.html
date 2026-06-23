@@ -257,7 +257,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Food access choropleth
   loadChoropleth(
     map,
-    'data/food_access_tracts.geojson',
+    'data/block_groups.geojson',
     f => foodColor(f.properties.nearest_grocery_miles),
     foodPopup
   ).then(layer => {
@@ -266,7 +266,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // Also load grocery store count for stat
-  fetch('data/grocery_stores_bexar.geojson')
+  fetch('data/grocery_stores.geojson')
     .then(r => r.ok ? r.json() : null).catch(() => null)
     .then(data => {
       if (data && data.features) {
@@ -285,7 +285,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   document.getElementById('toggle-groceries').addEventListener('change', e => {
     if (e.target.checked && !groceryLayer) {
-      loadPoints(map, 'data/grocery_stores_bexar.geojson', '#2c4a7c', 'Grocery store')
+      loadPoints(map, 'data/grocery_stores.geojson', '#2c4a7c', 'Grocery store')
         .then(l => { groceryLayer = l; });
     } else if (!e.target.checked && groceryLayer) {
       map.removeLayer(groceryLayer); groceryLayer = null;
@@ -294,7 +294,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   document.getElementById('toggle-foodbanks').addEventListener('change', e => {
     if (e.target.checked && !foodbankLayer) {
-      loadPoints(map, 'data/food_banks_bexar.geojson', '#c0392b', 'Food bank / pantry')
+      loadPoints(map, 'data/food_banks.geojson', '#c0392b', 'Food bank / pantry')
         .then(l => { foodbankLayer = l; });
     } else if (!e.target.checked && foodbankLayer) {
       map.removeLayer(foodbankLayer); foodbankLayer = null;
@@ -303,7 +303,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   document.getElementById('toggle-wic').addEventListener('change', e => {
     if (e.target.checked && !wicLayer) {
-      loadPoints(map, 'data/wic_clinics_bexar.geojson', '#e8a020', 'WIC clinic')
+      loadPoints(map, 'data/wic_clinics.geojson', '#e8a020', 'WIC clinic')
         .then(l => { wicLayer = l; });
     } else if (!e.target.checked && wicLayer) {
       map.removeLayer(wicLayer); wicLayer = null;
