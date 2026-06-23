@@ -1,6 +1,6 @@
 # Housing & Food Insecurity in San Antonio
 
-A CivicData SA analysis mapping housing and food insecurity across Bexar County at the neighborhood level.
+A San Antonio civic data analysis mapping housing and food insecurity across Bexar County at the neighborhood level.
 
 **Live site:** https://abigail-lindemann.github.io/sa-housing-food-insecurity  
 **Contact:** abigail.c.lindemann@gmail.com  
