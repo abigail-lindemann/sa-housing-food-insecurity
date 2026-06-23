@@ -3,7 +3,7 @@
 A CivicData SA analysis mapping housing and food insecurity across Bexar County at the neighborhood level.
 
 **Live site:** https://abigail-lindemann.github.io/sa-housing-food-insecurity  
-**Contact:** abigail.c.lindemann@gmail.com 
+**Contact:** abigail.c.lindemann@gmail.com
 **GitHub:** github.com/abigail-lindemann
 
 ---
