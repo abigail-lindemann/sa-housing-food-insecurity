@@ -77,7 +77,7 @@ Add these in your repo Settings → Secrets and variables → Actions:
 
 ## Keeping Data Current
 
-Most of the project is automated, but a few things need human attention once or twice a year. This section is written for future-you: someone coming back after months away who just needs a clear checklist.
+Most of the project is automated, but a few things need human attention once or twice a year.
 
 ### Annual checklist (run each January)
 
@@ -199,7 +199,7 @@ Each block group receives a housing insecurity score (0–1), computed as a norm
 
 ### Food Access Scoring
 Distance analysis from block group centroids to nearest full-service grocery store using a KD-tree spatial index. Two thresholds are shown simultaneously on the map:
-- **Strict (0.5 mile)** — consistent with CivicData SA park equity methodology
+- **Strict (0.5 mile)**
 - **USDA standard (1 mile)** — consistent with USDA Food Desert Atlas definition
 
 ### Combined Insecurity View
