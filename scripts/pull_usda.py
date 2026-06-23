@@ -2,11 +2,7 @@ import os, requests, pandas as pd
 from io import BytesIO
 
 # USDA Food Access Research Atlas — update this URL if USDA changes it
-# Check: ers.usda.gov/data-products/food-access-research-atlas/
-USDA_URL = (
-    'https://ers.usda.gov/webdocs/DataFiles/80591/'
-    'FoodAccessResearchAtlasData2019.xlsx'
-)
+USDA_URL = 'https://www.ers.usda.gov/media/5626/food-access-research-atlas-data-download-2019.xlsx?v=61620'
 
 BEXAR_FIPS = '48029'  # State + county FIPS for Bexar County
 
