@@ -261,7 +261,7 @@ a  { color: inherit; }
   align-items: start;
 }
 .narrative-text h2 { margin-bottom: 1rem; }
-.narrative-text p  { margin-bottom: 1rem; font-size: 0.95rem; color: var(--muted); }
+.narrative-text p  { margin-bottom: 1rem; font-size: 0.95rem; color: var(--muted); max-width: none; }
 .narrative-text p:last-child { margin-bottom: 0; }
 
 .pullquote {
