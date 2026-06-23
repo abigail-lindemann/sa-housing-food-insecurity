@@ -12,7 +12,7 @@ A CivicData SA analysis mapping housing and food insecurity across Bexar County 
 
 This project combines spatial analysis with plain-language narrative to make data on housing and food insecurity accessible and actionable. The goal is not just to describe the problem but to reveal the shape of it: where insecurity clusters, how it overlaps with income and demographics, and what the gaps in existing support look like on a map.
 
-The project produces two linked analysis pages published under the CivicData SA analyses index:
+The project produces two linked analysis pages:
 
 - **Page 1 — Housing insecurity:** cost burden, overcrowding, housing quality
 - **Page 2 — Food insecurity:** distance to grocery stores, food desert designation, SNAP/WIC participation
