@@ -158,7 +158,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (overlap && overlap.features && overlap.features.length) {
       const props = overlap.features.map(f => f.properties);
-      const both  = props.filter(p => (p.housing_score ?? 0) > 0.5 && (p.nearest_grocery_mi ?? 0) > 1).length;
+      const both  = props.filter(p => (p.housing_score ?? 0) > 0.5 && (p.nearest_grocery_miles ?? 0) > 1).length;
       const pct   = Math.round(both / props.length * 100);
       document.getElementById('stat-both').textContent = pct + '%';
       document.getElementById('bar-both').dataset.pct  = pct;
