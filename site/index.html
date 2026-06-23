@@ -127,9 +127,9 @@
 // Falls back to showing placeholder dashes if data isn't loaded yet.
 document.addEventListener('DOMContentLoaded', () => {
   Promise.all([
-    fetch('data/housing_block_groups.geojson').then(r => r.ok ? r.json() : null).catch(() => null),
-    fetch('data/food_access_tracts.geojson').then(r => r.ok ? r.json() : null).catch(() => null),
-    fetch('data/overlap_block_groups.geojson').then(r => r.ok ? r.json() : null).catch(() => null),
+    fetch('data/block_groups.geojson').then(r => r.ok ? r.json() : null).catch(() => null),
+    fetch('data/block_groups.geojson').then(r => r.ok ? r.json() : null).catch(() => null),
+    fetch('data/block_groups.geojson').then(r => r.ok ? r.json() : null).catch(() => null),
   ]).then(([housing, food, overlap]) => {
 
     if (housing && housing.features && housing.features.length) {
