@@ -261,9 +261,9 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!features.length) return;
 
     const n = features.length;
-    const both    = features.filter(p => (p.housing_score ?? 0) > 0.5 && (p.nearest_grocery_mi ?? 0) > 1).length;
-    const hOnly   = features.filter(p => (p.housing_score ?? 0) > 0.5 && (p.nearest_grocery_mi ?? 0) <= 1).length;
-    const fOnly   = features.filter(p => (p.housing_score ?? 0) <= 0.5 && (p.nearest_grocery_mi ?? 0) > 1).length;
+    const both    = features.filter(p => (p.housing_score ?? 0) > 0.5 && (p.nearest_grocery_miles ?? 0) > 1).length;
+    const hOnly   = features.filter(p => (p.housing_score ?? 0) > 0.5 && (p.nearest_grocery_miles ?? 0) <= 1).length;
+    const fOnly   = features.filter(p => (p.housing_score ?? 0) <= 0.5 && (p.nearest_grocery_miles ?? 0) > 1).length;
     const low     = n - both - hOnly - fOnly;
 
     const pBoth   = Math.round(both   / n * 100);
