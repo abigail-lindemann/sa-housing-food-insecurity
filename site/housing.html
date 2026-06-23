@@ -3,175 +3,318 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Housing Insecurity — CivicData SA</title>
+  <title>Housing Insecurity in San Antonio — CivicData SA</title>
+  <meta name="description" content="Mapping renter cost burden, overcrowding, and housing insecurity across Bexar County block groups.">
   <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 </head>
 <body>
 
-  <header class="site-header">
-    <span class="brand">CIVICDATA SA</span>
-    <nav>
-      <a href="index.html">Home</a>
-      <a href="food.html">Food Access</a>
-      <a href="overlap.html">Combined View</a>
-    </nav>
-  </header>
+<nav class="site-nav">
+  <a class="wordmark" href="index.html">CivicData SA</a>
+  <ul class="nav-links">
+    <li><a href="index.html">Overview</a></li>
+    <li><a href="housing.html" class="active">Housing</a></li>
+    <li><a href="food.html">Food Access</a></li>
+    <li><a href="overlap.html">Combined View</a></li>
+  </ul>
+</nav>
 
-  <div class="page-hero">
-    <h1>Housing Insecurity in San Antonio</h1>
-    <p class="subtitle">Cost burden, overcrowding, and rent stress across Bexar County · CivicData SA</p>
-    <p class="last-updated" id="last-updated"></p>
+<div class="page-hero">
+  <div class="eyebrow">Analysis 1 of 2 · Bexar County Block Groups</div>
+  <h1>Housing Insecurity<br>Across San Antonio</h1>
+  <p class="lede">
+    For many San Antonio renters, the math doesn't work. More than a third of
+    their income goes to rent — leaving little for food, healthcare, or savings.
+    This map shows where that pressure is highest, block by block.
+  </p>
+  <div class="meta">
+    <span>ACS 2019–2023 5-year estimates</span>
+    <span>~1,100 block groups</span>
+    <span>Census Tables B25070, B25014, B19013, B17010</span>
   </div>
+</div>
 
-  <div class="map-wrap">
-    <div id="map"></div>
-    <div class="map-legend">
-      <strong>Housing Insecurity Score</strong><br>
-      <span class="legend-swatch" style="background:#fff5f0"></span> Low (0.0–0.25)<br>
-      <span class="legend-swatch" style="background:#fcbba1"></span> Moderate (0.25–0.5)<br>
-      <span class="legend-swatch" style="background:#fb6a4a"></span> High (0.5–0.75)<br>
-      <span class="legend-swatch" style="background:#a50f15"></span> Very High (0.75–1.0)<br>
-      <span class="legend-swatch" style="background:#ccc"></span> No data
+<div class="stat-strip">
+  <div class="stat-strip-inner">
+    <div class="stat-card housing-accent">
+      <div class="stat-value" id="stat-cb">—</div>
+      <div class="stat-label">Average renter cost burden rate across Bexar County block groups</div>
+      <div class="stat-bar"><div class="stat-bar-fill housing-fill" data-pct="0" id="bar-cb"></div></div>
+    </div>
+    <div class="stat-card alert-accent">
+      <div class="stat-value" id="stat-scb">—</div>
+      <div class="stat-label">Pay more than half their income on housing — severe cost burden</div>
+      <div class="stat-bar"><div class="stat-bar-fill" data-pct="0" id="bar-scb"></div></div>
+    </div>
+    <div class="stat-card housing-accent">
+      <div class="stat-value" id="stat-oc">—</div>
+      <div class="stat-label">Average overcrowding rate — households with more than 1 person per room</div>
+      <div class="stat-bar"><div class="stat-bar-fill housing-fill" data-pct="0" id="bar-oc"></div></div>
+    </div>
+    <div class="stat-card alert-accent">
+      <div class="stat-value" id="stat-high">—</div>
+      <div class="stat-label">Block groups with a housing insecurity score above 0.5 — under significant pressure</div>
+      <div class="stat-bar"><div class="stat-bar-fill" data-pct="0" id="bar-high"></div></div>
     </div>
   </div>
+</div>
 
-  <div class="content-wrap">
-
-    <div class="stat-row">
-      <div class="stat-box">
-        <div class="number">277</div>
-        <div class="label">block groups with high housing insecurity</div>
-      </div>
-      <div class="stat-box">
-        <div class="number">46.5%</div>
-        <div class="label">average share of renters cost-burdened countywide</div>
-      </div>
-      <div class="stat-box">
-        <div class="number">22.7%</div>
-        <div class="label">average severe cost burden rate (>50% income on rent)</div>
-      </div>
+<section class="map-section">
+  <div id="map"></div>
+  <div class="map-sidebar">
+    <div>
+      <h2>Housing Insecurity Score</h2>
+      <p>
+        Each block group is scored 0–1 based on a normalized average of renter
+        cost burden rate, severe cost burden rate, and overcrowding rate from
+        ACS 5-year estimates.
+      </p>
     </div>
-
-    <div class="narrative">
-      <p>Across Bexar County, nearly half of all renters spend more than 30 percent of their
-      income on housing — the federal threshold for cost burden. In the hardest-hit neighborhoods,
-      that share climbs above 70 percent. Cost burden is not evenly distributed: it concentrates
-      on the East, South, and West sides of San Antonio, in areas with median household incomes
-      below $35,000.</p>
-
-      <h2>What the map shows</h2>
-      <p>Each block group is shaded by its housing insecurity score — a composite of renter cost
-      burden rate, severe cost burden rate (paying more than 50% of income on housing), and
-      overcrowding rate. Darker red indicates higher insecurity. Click any block group to see
-      its individual scores.</p>
-
-      <h2>Cost burden and income</h2>
-      <p>The relationship between income and housing cost burden is stark. Block groups with
-      median household incomes below $30,000 show cost burden rates above 60 percent on average.
-      Above $60,000, that rate drops below 25 percent. Housing stress in San Antonio is
-      overwhelmingly concentrated among low-income renters.</p>
-
-      <h2>Overcrowding</h2>
-      <p>Overcrowding — defined as more than one person per room — affects a smaller share of
-      households but clusters intensely in specific neighborhoods. The highest overcrowding rates
-      appear in areas with large immigrant and Hispanic populations on the West and South sides,
-      where families double up due to housing cost pressure.</p>
-
-      <h2>A note on eviction data</h2>
-      <p>Eviction filing rates were evaluated as a fourth indicator but could not be included
-      in this version: the Eviction Lab at Princeton no longer provides public bulk downloads
-      for Texas census tracts. A future update will incorporate eviction data from
-      Texas Housers (texashousers.org), which tracks Bexar County filings annually via
-      the Texas Public Information Act.</p>
+    <div class="map-controls">
+      <p style="font-size:0.78rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:0.25rem;">Show layers</p>
+      <label>
+        <input type="checkbox" id="toggle-housing" checked>
+        Housing insecurity score
+      </label>
+      <label>
+        <input type="checkbox" id="toggle-poverty">
+        Poverty rate overlay
+      </label>
     </div>
-
+    <div class="legend">
+      <div class="legend-title">Housing insecurity score</div>
+      <div class="legend-scale">
+        <div class="legend-swatch" style="background:#dce8f5"></div>
+        <div class="legend-swatch" style="background:#aec9e8"></div>
+        <div class="legend-swatch" style="background:#7aaad0"></div>
+        <div class="legend-swatch" style="background:#4a80b5"></div>
+        <div class="legend-swatch" style="background:#2c4a7c"></div>
+        <div class="legend-swatch" style="background:#1a2d4f"></div>
+      </div>
+      <div class="legend-labels"><span>Lower</span><span>Higher</span></div>
+    </div>
+    <p style="font-size:0.75rem;color:var(--muted);">
+      Click any block group to see cost burden, overcrowding, poverty rate, and median household income.
+    </p>
   </div>
+</section>
 
-  <div class="page-nav">
-    <a href="food.html">→ Food Access Analysis</a>
-    <a href="overlap.html">→ Combined Insecurity View</a>
-    <a href="index.html">← Back to Home</a>
+<section class="narrative">
+  <div class="narrative-text">
+    <h2>The Cost Burden Picture</h2>
+    <p>
+      Housing experts define "cost-burdened" as spending more than 30 percent of
+      household income on housing costs. In Bexar County, that threshold catches
+      a large share of renters — disproportionately in the South, East, and West
+      sides of the city, where incomes are lower and older housing stock makes
+      ownership less accessible.
+    </p>
+    <p>
+      Severe cost burden — more than 50 percent of income on housing — is the
+      sharper edge. Households in this category have little left for food,
+      transportation, healthcare, or emergencies. The map shows where these
+      households cluster.
+    </p>
+    <p>
+      Overcrowding (more than one person per room) captures a different
+      dimension of housing stress: families doubling up because they cannot
+      afford separate units. It is concentrated in block groups with the lowest
+      median incomes.
+    </p>
   </div>
+  <div>
+    <div class="pullquote">
+      "Neighborhoods with the highest cost burden don't just face a housing
+      problem — they're the same neighborhoods with the fewest grocery stores,
+      the longest commutes, and the thinnest social safety net."
+    </div>
+    <p style="font-size:0.8rem;color:var(--muted);margin-top:0.75rem;">
+      — Project framing note, CivicData SA
+    </p>
+  </div>
+</section>
 
-  <footer class="site-footer">
-    Built with open data · San Antonio, TX ·
-    <a href="https://github.com/civicdatasa">github.com/civicdatasa</a>
-  </footer>
+<section class="narrative" style="padding-top:0;">
+  <div class="narrative-text">
+    <h2>Income &amp; Demographics</h2>
+    <p>
+      Housing insecurity scores track closely with median household income across
+      block groups. Below $35,000 annual income, the share of cost-burdened
+      renters rises sharply — a pattern visible across the South Side, the
+      East Side, and neighborhoods near downtown where gentrification has pushed
+      rents faster than incomes have grown.
+    </p>
+    <p>
+      Hispanic or Latino households represent the majority of residents in the
+      highest-burden block groups, consistent with broader patterns of housing
+      inequity in Texas cities. The income–insecurity relationship holds even
+      within demographic groups, suggesting the mechanism is income-level, not
+      solely demographic.
+    </p>
+  </div>
+  <div class="narrative-text">
+    <h2>Service Coverage Gap</h2>
+    <p>
+      High housing insecurity scores don't automatically mean proximity to
+      housing assistance resources. The combined view (see link below) maps
+      service coverage gaps — block groups where insecurity is high but the
+      nearest housing assistance provider or food bank is more than a mile away.
+    </p>
+    <p>
+      These gap zones represent the planning challenge: neighborhoods where need
+      is measurable and visible, but service infrastructure hasn't caught up.
+    </p>
+  </div>
+</section>
 
-  <script>
-    // ── Map setup ──
-    const map = L.map('map').setView([29.45, -98.50], 11);
+<div class="method-note">
+  <details>
+    <summary>Methodology note — housing insecurity score</summary>
+    <p>
+      The housing insecurity score for each block group is computed as a
+      normalized (0–1) average of three ACS variables: renter cost burden rate
+      (share of renters paying &gt;30% of income on housing, from Table B25070),
+      severe cost burden rate (share paying &gt;50%, also B25070), and
+      overcrowding rate (share of units with more than 1.0 persons per room,
+      from Table B25014). Each variable is independently normalized to its
+      county-wide min–max range before averaging. Block groups with fewer than
+      50 renter-occupied units are flagged as low-reliability estimates.
+    </p>
+    <p>
+      Eviction data was evaluated as a fourth indicator but excluded from this
+      version. Eviction Lab no longer provides public bulk downloads at the
+      census tract level; a formal data request is required. A future update
+      will incorporate Bexar County eviction filings from Texas Housers
+      (texashousers.org), which tracks these annually via Public Information Act
+      requests. See the README for details.
+    </p>
+  </details>
+</div>
 
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-      attribution: '© OpenStreetMap © CARTO',
-      maxZoom: 18
-    }).addTo(map);
+<section class="crosslink-strip">
+  <div class="crosslink-inner">
+    <a href="food.html" class="crosslink-card">
+      <div class="card-tag">Analysis 2</div>
+      <h3>Food Access</h3>
+      <p>How far is the nearest grocery store? Which neighborhoods have none within walking distance?</p>
+      <div class="arrow">→</div>
+    </a>
+    <a href="overlap.html" class="crosslink-card">
+      <div class="card-tag">Combined View</div>
+      <h3>Where Both Overlap</h3>
+      <p>Block groups under pressure on both housing and food dimensions — and the service gaps that follow.</p>
+      <div class="arrow">→</div>
+    </a>
+    <a href="index.html" class="crosslink-card">
+      <div class="card-tag">Project</div>
+      <h3>About This Analysis</h3>
+      <p>Data sources, methods, automated refresh schedule, and how to reproduce this work.</p>
+      <div class="arrow">→</div>
+    </a>
+  </div>
+</section>
 
-    // ── Color scale ──
-    function getColor(score) {
-      if (score === null || score === undefined) return '#cccccc';
-      if (score >= 0.75) return '#a50f15';
-      if (score >= 0.50) return '#fb6a4a';
-      if (score >= 0.25) return '#fcbba1';
-      return '#fff5f0';
+<footer class="site-footer">
+  <span>Built with open data · <a href="mailto:civicdatasa@gmail.com">civicdatasa@gmail.com</a> · <a href="https://github.com/civicdatasa" target="_blank" rel="noopener">GitHub</a></span>
+  <span id="last-updated"></span>
+</footer>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="js/map.js"></script>
+<script src="js/site.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  // ── Initialize map ──────────────────────────────────────────
+  const map = L.map('map', {
+    center: [29.43, -98.49],
+    zoom: 11,
+    zoomControl: true,
+  });
+
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png', {
+    attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, © <a href="https://carto.com/">CARTO</a>',
+    maxZoom: 18
+  }).addTo(map);
+
+  // Label layer on top
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}{r}.png', {
+    attribution: '', maxZoom: 18, pane: 'overlayPane'
+  }).addTo(map);
+
+  // ── Load housing GeoJSON ────────────────────────────────────
+  let housingLayer = null;
+  loadChoropleth(
+    map,
+    'data/housing_block_groups.geojson',
+    f => housingColor(f.properties.housing_score),
+    housingPopup
+  ).then(layer => {
+    housingLayer = layer;
+    if (layer) updateStats(layer);
+  });
+
+  // ── Layer toggle ────────────────────────────────────────────
+  document.getElementById('toggle-housing').addEventListener('change', e => {
+    if (housingLayer) {
+      if (e.target.checked) housingLayer.addTo(map);
+      else map.removeLayer(housingLayer);
     }
+  });
 
-    function style(feature) {
-      return {
-        fillColor: getColor(feature.properties.housing_score),
-        weight: 0.5,
-        opacity: 1,
-        color: '#999',
-        fillOpacity: 0.8
-      };
+  // Poverty overlay is a secondary coloring — reload with different style
+  let povertyLayer = null;
+  document.getElementById('toggle-poverty').addEventListener('change', e => {
+    if (e.target.checked && !povertyLayer) {
+      loadChoropleth(
+        map,
+        'data/housing_block_groups.geojson',
+        f => {
+          const p = f.properties.poverty_rate ?? 0;
+          const colors = ['#fef0d9','#fdd49e','#fdbb84','#fc8d59','#e34a33','#b30000'];
+          const i = Math.min(Math.floor(p / 0.15 * (colors.length - 1)), colors.length - 1);
+          return colors[i];
+        },
+        housingPopup,
+        { fitBounds: false }
+      ).then(l => { povertyLayer = l; });
+    } else if (!e.target.checked && povertyLayer) {
+      map.removeLayer(povertyLayer);
+      povertyLayer = null;
     }
+  });
 
-    // ── Popup ──
-    function onEachFeature(feature, layer) {
-      const p = feature.properties;
-      const score    = p.housing_score != null ? p.housing_score.toFixed(3) : 'N/A';
-      const cb       = p.cost_burden_rate != null ? (p.cost_burden_rate * 100).toFixed(1) + '%' : 'N/A';
-      const scb      = p.severe_cost_burden_rate != null ? (p.severe_cost_burden_rate * 100).toFixed(1) + '%' : 'N/A';
-      const oc       = p.overcrowding_rate != null ? (p.overcrowding_rate * 100).toFixed(1) + '%' : 'N/A';
-      const inc      = p.B19013_001E != null ? '$' + Number(p.B19013_001E).toLocaleString() : 'N/A';
-      const pov      = p.poverty_rate != null ? (p.poverty_rate * 100).toFixed(1) + '%' : 'N/A';
+  // ── Compute and display summary stats ───────────────────────
+  function updateStats(layer) {
+    const features = [];
+    layer.eachLayer(l => { if (l.feature) features.push(l.feature.properties); });
+    if (!features.length) return;
 
-      layer.bindPopup(`
-        <div class="popup-title">Block Group ${p.GEOID}</div>
-        <div class="popup-row"><span class="popup-label">Housing score</span><span>${score}</span></div>
-        <div class="popup-row"><span class="popup-label">Cost burden</span><span>${cb}</span></div>
-        <div class="popup-row"><span class="popup-label">Severe cost burden</span><span>${scb}</span></div>
-        <div class="popup-row"><span class="popup-label">Overcrowding</span><span>${oc}</span></div>
-        <div class="popup-row"><span class="popup-label">Median income</span><span>${inc}</span></div>
-        <div class="popup-row"><span class="popup-label">Poverty rate</span><span>${pov}</span></div>
-      `);
+    const avg = (arr, key) => {
+      const vals = arr.map(p => p[key]).filter(v => v != null && !isNaN(v));
+      return vals.length ? vals.reduce((a,b) => a+b, 0) / vals.length : null;
+    };
+    const cb  = avg(features, 'cost_burden_rate');
+    const scb = avg(features, 'severe_cost_burden_rate');
+    const oc  = avg(features, 'overcrowding_rate');
+    const high = features.filter(p => (p.housing_score ?? 0) > 0.5).length;
+    const highPct = Math.round(high / features.length * 100);
 
-      layer.on('mouseover', function() { this.setStyle({ weight: 2, color: '#333' }); });
-      layer.on('mouseout',  function() { geojsonLayer.resetStyle(this); });
-    }
-
-    // ── Load GeoJSON ──
-    let geojsonLayer;
-    fetch('data/block_groups.geojson')
-      .then(r => r.json())
-      .then(data => {
-        geojsonLayer = L.geoJSON(data, { style, onEachFeature }).addTo(map);
-      })
-      .catch(err => console.error('Failed to load GeoJSON:', err));
-
-    // ── Last updated badge ──
-    fetch('data/last_updated.json')
-      .then(r => r.json())
-      .then(d => {
-        const date = new Date(d.updated).toLocaleDateString('en-US', {
-          year: 'numeric', month: 'long', day: 'numeric'
-        });
-        document.getElementById('last-updated').textContent = 'Data last updated: ' + date;
-      })
-      .catch(() => {});
-  </script>
-
+    const set = (id, barId, val) => {
+      if (val == null) return;
+      const pct = Math.round(val * 100);
+      document.getElementById(id).textContent  = pct + '%';
+      document.getElementById(barId).dataset.pct = pct;
+      setTimeout(() => { document.getElementById(barId).style.width = pct + '%'; }, 200);
+    };
+    set('stat-cb',  'bar-cb',  cb);
+    set('stat-scb', 'bar-scb', scb);
+    set('stat-oc',  'bar-oc',  oc);
+    document.getElementById('stat-high').textContent = highPct + '%';
+    document.getElementById('bar-high').dataset.pct  = highPct;
+    setTimeout(() => { document.getElementById('bar-high').style.width = highPct + '%'; }, 200);
+  }
+});
+</script>
 </body>
 </html>
